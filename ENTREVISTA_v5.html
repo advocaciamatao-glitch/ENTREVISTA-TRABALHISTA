@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIAJFMB v5.0 — Entrevista Trabalhista</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --pr:#0f2d4a;--pr-d:#071e33;--pr-l:#e8f1f8;--pr-ll:#f4f8fb;
+  --ac:#c9952a;--ac-l:#fff8eb;
+  --ok:#1a6b3c;--ok-l:#edfff5;
+  --er:#b91c1c;--er-l:#fff0f0;
+  --wa:#b45309;--wa-l:#fffbeb;
+  --bg:#eef2f6;--card:#ffffff;
+  --bd:#ccd8e4;--bd2:#e4edf5;
+  --tx:#111827;--tx2:#4b6278;--tx3:#8fa8bc;
+  --sh:0 8px 40px -8px rgba(0,0,0,.12);
+  --sh2:0 2px 12px rgba(0,0,0,.08);
+  --r:14px;--fn:'Lato',system-ui,sans-serif;--fn2:'Inter',system-ui,sans-serif;
+}
+[data-theme="dark"]{
+  --bg:#0d1b2a;--card:#132336;--bd:#1e3a52;--bd2:#1a3045;
+  --tx:#e8f1f8;--tx2:#8fb8d0;--tx3:#4a7a99;
+  --pr-l:#1a3550;--pr-ll:#162d44;--ac-l:#2a1f00;
+  --ok-l:#0d2218;--er-l:#2a0d0d;--wa-l:#2a1800;
+  --sh:0 8px 40px -8px rgba(0,0,0,.4);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);font-family:var(--fn);color:var(--tx);min-height:100vh;transition:background .3s,color .3s;}
+
+/* ── SPLASH ── */
+#splashScreen{
+  position:fixed;inset:0;z-index:9000;
+  background:linear-gradient(135deg,#071e33 0%,#0f2d4a 50%,#1a4a6b 100%);
+  display:flex;align-items:center;justify-content:center;
+}
+#splashScreen::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 80% at 20% 20%,rgba(201,149,42,.08) 0%,transparent 60%),
+             radial-gradient(ellipse 60% 60% at 80% 80%,rgba(26,107,60,.08) 0%,transparent 60%);
+  animation:splashPulse 6s ease-in-out infinite;
+}
+@keyframes splashPulse{0%,100%{opacity:.6}50%{opacity:1}}
+.splash-card{
+  background:rgba(255,255,255,.06);backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.12);border-radius:28px;
+  padding:52px 56px;text-align:center;max-width:500px;width:90%;
+  box-shadow:0 40px 80px rgba(0,0,0,.4);position:relative;z-index:1;
+  animation:splashIn .6s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes splashIn{from{opacity:0;transform:translateY(30px)scale(.95)}to{opacity:1;transform:none}}
+.splash-logo{font-size:4rem;margin-bottom:16px;filter:drop-shadow(0 4px 16px rgba(201,149,42,.4));}
+.splash-title{font-family:var(--fn2);font-size:1.6rem;font-weight:800;color:#fff;margin-bottom:6px;letter-spacing:-.5px;}
+.splash-sub{color:rgba(255,255,255,.55);font-size:.82rem;margin-bottom:36px;letter-spacing:.3px;}
+.splash-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(201,149,42,.2);
+  border:1px solid rgba(201,149,42,.4);color:#f5c842;
+  padding:4px 14px;border-radius:999px;font-size:.72rem;font-weight:700;
+  margin-bottom:28px;letter-spacing:.5px;}
+.splash-btn-primary{
+  width:100%;padding:14px;background:linear-gradient(135deg,var(--ac),#e6a820);
+  border:none;color:#fff;font-weight:800;font-size:.95rem;border-radius:14px;
+  cursor:pointer;font-family:var(--fn2);transition:.2s;margin-bottom:10px;
+  box-shadow:0 4px 20px rgba(201,149,42,.35);letter-spacing:.2px;
+}
+.splash-btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,149,42,.5);}
+.splash-btn-sec{
+  width:100%;padding:11px;background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);
+  font-weight:600;font-size:.85rem;border-radius:14px;cursor:pointer;
+  font-family:var(--fn2);transition:.2s;
+}
+.splash-btn-sec:hover{background:rgba(255,255,255,.16);}
+.splash-session-info{
+  margin-top:8px;font-size:.7rem;color:rgba(255,255,255,.35);
+}
+.splash-theme-btn{
+  position:absolute;top:20px;right:20px;background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.2);color:#fff;width:36px;height:36px;
+  border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;
+  transition:.2s;
+}
+.splash-theme-btn:hover{background:rgba(255,255,255,.22);}
+
+/* ── MAIN APP ── */
+#mainApp{display:none;}
+#mainApp.visible{display:block;}
+
+/* ── HEADER ── */
+.app-header{
+  background:var(--card);border-bottom:1px solid var(--bd);
+  position:sticky;top:0;z-index:200;
+  padding:0 20px;display:flex;align-items:center;gap:12px;min-height:52px;
+  box-shadow:var(--sh2);
+}
+.header-logo{
+  display:flex;align-items:center;gap:8px;font-family:var(--fn2);
+  font-weight:800;color:var(--pr);font-size:.9rem;white-space:nowrap;flex-shrink:0;
+}
+.header-logo span{font-size:1.2rem;}
+.header-spacer{flex:1;}
+.header-autosave{font-size:.65rem;color:var(--tx3);white-space:nowrap;}
+.header-btns{display:flex;gap:6px;flex-shrink:0;}
+.hbtn{
+  display:inline-flex;align-items:center;gap:5px;padding:6px 12px;
+  border-radius:20px;border:1.5px solid var(--bd);background:var(--card);
+  color:var(--tx2);font-size:.72rem;font-weight:700;cursor:pointer;
+  transition:.18s;font-family:var(--fn2);white-space:nowrap;
+}
+.hbtn:hover{border-color:var(--pr);color:var(--pr);}
+.hbtn.active{background:var(--pr);color:#fff;border-color:var(--pr);}
+.hbtn.entrevista-on{background:#1a6b3c;color:#fff;border-color:#1a6b3c;}
+.hbtn.cliente-on{background:#7c3aed;color:#fff;border-color:#7c3aed;}
+
+/* ── SECTION TABS ── */
+.section-tabs-wrap{
+  background:var(--card);border-bottom:1px solid var(--bd);
+  position:sticky;top:52px;z-index:190;overflow-x:auto;
+  scrollbar-width:none;display:flex;align-items:stretch;min-height:40px;
+}
+.section-tabs-wrap::-webkit-scrollbar{display:none;}
+.stab{
+  display:inline-flex;align-items:center;gap:5px;padding:0 14px;
+  font-size:.68rem;font-weight:700;color:var(--tx2);white-space:nowrap;
+  border-bottom:2px solid transparent;cursor:pointer;transition:.18s;
+  flex-shrink:0;
+}
+.stab:hover{color:var(--pr);}
+.stab.active{color:var(--pr);border-bottom-color:var(--pr);}
+.stab-ring{
+  width:16px;height:16px;border-radius:50%;border:2px solid var(--bd);
+  display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:800;
+  transition:.3s;flex-shrink:0;
+}
+.stab.done .stab-ring{background:var(--ok);border-color:var(--ok);color:#fff;}
+.stab.partial .stab-ring{background:var(--ac);border-color:var(--ac);color:#fff;}
+
+/* ── LAYOUT ── */
+.app-body{display:flex;align-items:flex-start;gap:0;max-width:1400px;margin:0 auto;padding:0;}
+.form-col{flex:1;min-width:0;padding:20px 20px 60px;}
+.live-col{
+  width:320px;flex-shrink:0;padding:20px 20px 20px 0;
+  position:sticky;top:92px;max-height:calc(100vh - 92px);
+  overflow-y:auto;scrollbar-width:thin;
+}
+.live-col::-webkit-scrollbar{width:4px;}
+.live-col::-webkit-scrollbar-thumb{background:var(--bd);border-radius:4px;}
+@media(max-width:1100px){.live-col{display:none;}}
+
+/* ── PROGRESS BAR ── */
+#progressBar{
+  position:sticky;top:92px;z-index:150;background:var(--card);
+  padding:6px 20px 4px;border-bottom:1px solid var(--bd2);margin:0 -20px;
+}
+#progressBarInner{height:4px;background:linear-gradient(90deg,var(--pr),var(--ac));border-radius:4px;transition:width .4s;}
+#progressLabel{font-size:.65rem;color:var(--tx3);text-align:right;margin-top:2px;}
+
+/* ── CONTAINER ── */
+.form-container{max-width:760px;margin:0 auto;}
+.form-header{
+  background:var(--card);border-radius:var(--r);box-shadow:var(--sh2);
+  padding:20px 24px;margin-bottom:16px;border:1px solid var(--bd2);
+}
+.form-header .badge{
+  display:inline-flex;align-items:center;gap:6px;background:var(--pr-l);color:var(--pr);
+  border:1.5px solid var(--bd);padding:3px 12px;border-radius:999px;
+  font-size:.68rem;font-weight:800;letter-spacing:.5px;margin-bottom:10px;
+}
+.form-header h1{font-family:var(--fn2);font-size:1.5rem;font-weight:800;color:var(--pr);
+  margin-bottom:4px;letter-spacing:-.5px;}
+.form-header p{color:var(--tx2);font-size:.8rem;}
+
+/* ── SECTION TITLE ── */
+.section-title{
+  font-family:var(--fn2);font-size:.82rem;font-weight:800;
+  margin:24px 0 10px;color:#fff;
+  background:linear-gradient(135deg,var(--pr),#1a4a6b);
+  padding:8px 16px;border-radius:30px;
+  display:flex;align-items:center;gap:8px;letter-spacing:.1px;
+  box-shadow:0 2px 12px rgba(15,45,74,.2);
+}
+.section-title.sec-done{background:linear-gradient(135deg,var(--ok),#1a5c34);opacity:.85;}
+
+/* ── QUESTION ── */
+.q-wrap{margin-bottom:10px;border-bottom:1px solid var(--bd2);padding-bottom:8px;}
+.q-main{display:flex;align-items:flex-start;gap:8px;}
+.q-content{flex:1;display:flex;flex-direction:column;gap:5px;}
+.q-label{font-weight:700;color:var(--tx);font-size:.82rem;line-height:1.35;font-family:var(--fn2);}
+
+/* ── INPUTS ── */
+input,select,textarea{
+  width:100%;padding:8px 12px;font-size:.85rem;
+  border:1.5px solid var(--bd);border-radius:10px;
+  background:var(--card);font-family:var(--fn);
+  transition:border-color .2s,box-shadow .2s;outline:none;color:var(--tx);}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--pr);box-shadow:0 0 0 3px rgba(15,45,74,.10);}
+textarea{resize:none;overflow:hidden;min-height:40px;line-height:1.4;}
+input.api-ok,textarea.api-ok,select.api-ok{border-color:var(--ok)!important;}
+input.api-err,textarea.api-err{border-color:var(--er)!important;}
+input[type=time]{height:38px;width:auto;min-width:120px;}
+.api-msg{font-size:.68rem;margin-top:3px;padding:2px 8px;border-radius:6px;display:none;}
+.api-msg.ok{display:block;color:var(--ok);}
+.api-msg.err{display:block;color:var(--er);}
+.api-msg.loading{display:block;color:var(--pr);}
+
+/* ── ACTIVE/ANSWERED STATES ── */
+.q-wrap[data-state="pending"]{display:none!important;}
+.q-wrap[data-state="hidden"]{display:none!important;}
+.q-wrap[data-state="active"]{
+  background:linear-gradient(135deg,var(--pr-ll),var(--pr-l));
+  border:2px solid var(--pr);border-radius:12px;padding:14px 16px;
+  margin-bottom:14px;box-shadow:0 4px 20px rgba(15,45,74,.12);
+  animation:qSlide .22s ease;
+}
+@keyframes qSlide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.q-wrap[data-state="answered"]{
+  background:var(--card);border:1.5px solid var(--bd2);border-radius:10px;
+  padding:8px 14px;margin-bottom:6px;cursor:pointer;transition:.15s;
+  display:flex!important;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.q-wrap[data-state="answered"]:hover{border-color:var(--pr);background:var(--pr-ll);}
+.q-wrap[data-state="answered"] .q-main,
+.q-wrap[data-state="answered"] .obs-area,
+.q-wrap[data-state="answered"] .btn-obs,
+.q-wrap[data-state="answered"] .calc-result,
+.q-wrap[data-state="answered"] .hint,
+.q-wrap[data-state="answered"] .api-msg,
+.q-wrap[data-state="answered"] .badge-detalhar,
+.q-wrap[data-state="answered"] .insalub-resumo{display:none!important;}
+.q-answered-chip{display:flex;align-items:center;gap:8px;width:100%;}
+.q-answered-label{font-size:.72rem;font-weight:700;color:var(--tx2);flex:0 0 auto;max-width:46%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.q-answered-value{font-size:.79rem;font-weight:700;color:var(--pr);background:var(--pr-l);border-radius:20px;padding:2px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55%;}
+.q-answered-edit{margin-left:auto;font-size:.62rem;color:var(--tx3);flex-shrink:0;}
+.q-progress-badge{width:20px;height:20px;border-radius:50%;background:var(--pr);color:#fff;font-size:.6rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* ── OBS ── */
+.btn-obs{background:var(--bd2);border:1.5px solid var(--bd);color:var(--pr);font-size:.9rem;font-weight:800;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.18s;flex-shrink:0;margin-top:2px;user-select:none;}
+.btn-obs:hover{background:var(--pr-l);}
+.obs-area{margin-top:8px;padding-left:8px;border-left:3px solid #9bbfce;display:none;}
+.obs-area label{font-size:.65rem;font-weight:800;text-transform:uppercase;color:var(--ok);letter-spacing:.5px;margin-bottom:3px;display:block;}
+.obs-area textarea{background:var(--ac-l);border:1px solid var(--bd);font-size:.8rem;}
+
+/* ── HINT / TOOLTIP ── */
+small.hint{font-size:.67rem;color:var(--tx3);margin-top:2px;display:block;}
+.tt-wrap{display:inline-flex;align-items:center;gap:5px;width:100%;}
+.tt-label{flex:1;font-weight:700;color:var(--tx);font-size:.82rem;line-height:1.35;}
+.tt-btn{width:16px;height:16px;border-radius:50%;background:var(--bd);color:var(--pr);font-size:.58rem;font-weight:900;display:inline-flex;align-items:center;justify-content:center;cursor:help;flex-shrink:0;border:1px solid var(--bd);position:relative;padding:0;}
+.tt-box{display:none;position:absolute;z-index:400;background:#0d2a3e;color:#d0e8f5;font-size:.7rem;padding:10px 14px;border-radius:10px;width:260px;left:22px;top:50%;transform:translateY(-50%);line-height:1.5;box-shadow:0 4px 24px rgba(0,0,0,.35);pointer-events:none;}
+.tt-btn:hover .tt-box,.tt-btn:focus .tt-box{display:block;}
+
+/* ── CALC RESULT ── */
+.calc-result{display:none;font-size:.74rem;font-weight:700;color:var(--er);background:var(--er-l);border:1.5px solid #fca5a5;border-radius:7px;padding:4px 11px;margin-top:5px;}
+.calc-result.ativo{display:block;}
+
+/* ── BADGE DETALHAR ── */
+.badge-detalhar{display:inline-flex;align-items:center;gap:6px;margin-top:6px;background:var(--ac-l);border:1.5px solid var(--ac);color:#92400e;padding:5px 14px;border-radius:30px;font-size:.76rem;font-weight:700;cursor:pointer;transition:.18s;}
+.badge-detalhar:hover{background:#fff0c0;}
+.insalub-resumo{margin-top:7px;font-size:.75rem;color:var(--tx);background:var(--ok-l);border:1px solid #9ae6b4;border-radius:7px;padding:6px 11px;line-height:1.5;display:none;}
+.insalub-resumo.ativo{display:block;}
+
+/* ── BUTTONS ── */
+.button-bar{display:flex;justify-content:space-between;gap:12px;margin-top:28px;flex-wrap:wrap;}
+.btn-grp{display:flex;gap:8px;flex-wrap:wrap;}
+button{background:var(--pr);border:none;color:#fff;font-weight:700;font-size:.82rem;padding:9px 18px;border-radius:30px;cursor:pointer;transition:.18s;display:inline-flex;align-items:center;gap:6px;font-family:var(--fn2);}
+button:hover{background:var(--pr-d);transform:scale(.98);}
+.btn-sec{background:#4a7080;}
+.btn-sec:hover{background:#3a5f6f;}
+.btn-danger{background:#b91c1c;}
+.btn-danger:hover{background:#991616;}
+.btn-ok{background:var(--ok);}
+.btn-ok:hover{background:#145c32;}
+.btn-purple{background:#7c3aed;}
+.btn-purple:hover{background:#6d28d9;}
+.btn-whats{background:#25D366;color:#fff;}
+.btn-whats:hover{background:#1aad52;}
+
+/* ── SUMMARY ── */
+.summary-box{margin-top:20px;border:1.5px solid var(--bd);background:var(--pr-ll);border-radius:var(--r);padding:16px;}
+.summary-box h3{color:var(--pr);margin-bottom:8px;font-size:.9rem;font-family:var(--fn2);font-weight:800;}
+.summary-box textarea{min-height:160px;background:var(--card);}
+
+/* ── LIVE PANEL ── */
+.live-card{background:var(--card);border:1.5px solid var(--bd2);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:var(--sh2);}
+.live-card-title{font-family:var(--fn2);font-size:.72rem;font-weight:800;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+
+/* GAUGE */
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;}
+.gauge-svg{width:200px;height:110px;}
+.gauge-score{font-family:var(--fn2);font-size:2rem;font-weight:900;fill:var(--pr);}
+[data-theme="dark"] .gauge-score{fill:#e8f1f8;}
+.gauge-label{font-family:var(--fn2);font-size:.65rem;font-weight:700;fill:var(--tx2);}
+.gauge-valor{font-size:1.1rem;font-weight:800;color:var(--ac);margin-top:4px;font-family:var(--fn2);}
+.gauge-viab{font-size:.7rem;color:var(--tx2);margin-top:2px;font-weight:700;}
+
+/* VIOLATIONS */
+.viol-card{
+  padding:8px 12px;border-radius:10px;margin-bottom:6px;border-left:4px solid;
+  animation:violIn .3s ease;
+}
+@keyframes violIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+.viol-card.er{background:var(--er-l);border-color:var(--er);}
+.viol-card.wa{background:var(--wa-l);border-color:var(--wa);}
+.viol-card.ok{background:var(--ok-l);border-color:var(--ok);}
+.viol-title{font-size:.72rem;font-weight:700;color:var(--tx);line-height:1.3;}
+.viol-norma{font-size:.63rem;color:var(--tx3);margin-top:2px;}
+.viol-val{font-size:.72rem;font-weight:800;color:var(--er);margin-top:2px;}
+
+/* ALERTS */
+.alert-item{
+  display:flex;align-items:flex-start;gap:8px;padding:8px 10px;
+  border-radius:10px;margin-bottom:6px;border-left:4px solid;
+  animation:violIn .3s ease;font-size:.72rem;line-height:1.3;
+}
+.alert-item.er{background:var(--er-l);border-color:var(--er);color:var(--er);}
+.alert-item.wa{background:var(--wa-l);border-color:var(--wa);color:var(--wa);}
+.alert-item.ok{background:var(--ok-l);border-color:var(--ok);color:var(--ok);}
+
+/* TIMELINE */
+.timeline-wrap{overflow-x:auto;padding:4px 0 8px;}
+.timeline-svg{min-width:260px;width:100%;}
+
+/* ── SIGNATURE PAD ── */
+#signatureCanvas{border:2px solid var(--bd);border-radius:10px;cursor:crosshair;background:#fff;touch-action:none;width:100%;height:160px;}
+.sig-preview{width:100%;max-height:80px;object-fit:contain;border:1.5px solid var(--bd);border-radius:8px;margin-top:8px;}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:600;overflow-y:auto;padding:16px;align-items:flex-start;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--card);border-radius:20px;max-width:680px;width:100%;margin:12px auto;box-shadow:0 30px 80px rgba(0,0,0,.4);border:1px solid var(--bd);}
+.modal-header{background:linear-gradient(135deg,var(--pr),#1a4a6b);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-radius:20px 20px 0 0;}
+.modal-header h2{font-size:.92rem;font-family:var(--fn2);font-weight:700;margin:0;}
+.modal-close{background:rgba(255,255,255,.2);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-weight:700;}
+.modal-body{padding:16px 20px;max-height:60vh;overflow-y:auto;}
+.modal-group{margin-bottom:12px;border:1.5px solid var(--bd2);border-radius:10px;overflow:hidden;}
+.modal-group-title{background:var(--pr-l);padding:8px 14px;font-weight:800;font-size:.78rem;color:var(--pr);border-bottom:1.5px solid var(--bd2);display:flex;align-items:center;gap:6px;}
+.modal-item{padding:10px 14px;border-bottom:1px solid var(--bd2);}
+.modal-item:last-child{border-bottom:none;}
+.modal-check-label{display:flex;align-items:flex-start;gap:10px;cursor:pointer;}
+.modal-check-label input[type=checkbox]{width:16px;height:16px;flex-shrink:0;margin-top:2px;accent-color:var(--pr);cursor:pointer;}
+.modal-item-title{font-weight:700;font-size:.8rem;color:var(--tx);line-height:1.3;}
+.modal-item-desc{font-size:.7rem;color:var(--tx2);margin-top:3px;line-height:1.4;font-style:italic;}
+.modal-footer{padding:12px 20px;background:var(--pr-ll);border-top:1.5px solid var(--bd2);border-radius:0 0 20px 20px;display:flex;justify-content:flex-end;gap:10px;}
+
+/* ── TOAST ── */
+.toast-container{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
+.toast{
+  background:var(--tx);color:var(--card);padding:10px 16px;border-radius:12px;
+  font-size:.78rem;font-weight:600;font-family:var(--fn2);
+  box-shadow:0 4px 20px rgba(0,0,0,.25);pointer-events:auto;
+  animation:toastIn .3s ease;max-width:280px;
+}
+.toast.ok{background:var(--ok);}
+.toast.er{background:var(--er);}
+.toast.wa{background:var(--wa);}
+@keyframes toastIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes toastOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(20px)}}
+.toast.hide{animation:toastOut .3s ease forwards;}
+
+/* ── QR MODAL ── */
+#qrCanvas{display:block;margin:0 auto;border-radius:10px;}
+.qr-instrucao{text-align:center;font-size:.75rem;color:var(--tx2);margin-top:12px;}
+
+/* ── JORNADA SMART ── */
+.jornada-smart-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;}
+@media(max-width:500px){.jornada-smart-row{grid-template-columns:1fr;}}
+
+/* ── PRINT ── */
+#printView{display:none;}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  @page{margin:1.2cm 1.4cm;}
+  body>*{display:none!important;}
+  #printView{display:block!important;font-family:'Lato',sans-serif;font-size:9pt;color:#111;line-height:1.5;}
+  #printView .pv-header{text-align:center;border-bottom:2.5px solid #0f2d4a;padding-bottom:8px;margin-bottom:14px;}
+  #printView .pv-header h1{font-size:12pt;color:#0f2d4a;margin:0 0 2px;}
+  #printView .pv-header p{font-size:8pt;color:#555;margin:0;}
+  #printView .pv-section{margin-bottom:10px;break-inside:avoid;}
+  #printView .pv-section-title{background:#0f2d4a;color:#fff;font-size:8.5pt;font-weight:700;padding:4px 10px;border-radius:4px;margin-bottom:6px;}
+  #printView .pv-row{display:flex;gap:8px;padding:3px 4px;border-bottom:1px solid #e8e8e8;break-inside:avoid;}
+  #printView .pv-label{font-weight:700;color:#0f2d4a;min-width:190px;max-width:190px;font-size:8.5pt;}
+  #printView .pv-val{flex:1;color:#111;font-size:8.5pt;}
+  #printView .pv-obs{font-size:7.5pt;color:#555;font-style:italic;background:#fffbf0;border-left:3px solid #c9952a;padding:3px 7px;margin:2px 0 4px 198px;}
+  #printView .pv-resumo{margin-top:14px;border-top:2px solid #0f2d4a;padding-top:10px;break-before:page;}
+  #printView .pv-resumo h2{font-size:10pt;color:#0f2d4a;margin-bottom:8px;}
+  #printView .pv-resumo pre{font-family:'Lato',sans-serif;font-size:8pt;white-space:pre-wrap;word-break:break-word;line-height:1.6;background:#f9f9f9;padding:10px;border-radius:4px;border:1px solid #ddd;}
+  #printView .pv-sig{margin-top:10px;text-align:center;}
+  #printView .pv-sig img{max-width:250px;border:1px solid #ccc;border-radius:4px;}
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .form-col{padding:12px 12px 60px;}
+  .app-header{padding:0 12px;}
+  .header-logo .logo-text{display:none;}
+  .hbtn .btn-label{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splashScreen">
+  <button class="splash-theme-btn" id="splashThemeBtn" title="Alternar tema">🌙</button>
+  <div class="splash-card">
+    <div class="splash-logo">⚖️</div>
+    <div class="splash-badge">SIAJFMB • VERSÃO 5.0 • SISTEMA PRO</div>
+    <div class="splash-title">Entrevista Trabalhista</div>
+    <div class="splash-sub">Sistema Inteligente de Análise Jurídica</div>
+    <button class="splash-btn-primary" id="btnNovaEntrevista">🎯 Iniciar Nova Entrevista</button>
+    <button class="splash-btn-sec" id="btnRecuperarSessao" style="display:none">🔄 Recuperar Sessão Anterior</button>
+    <div class="splash-session-info" id="splashSessionInfo"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp">
+
+<!-- HEADER -->
+<div class="app-header">
+  <div class="header-logo"><span>⚖️</span><span class="logo-text">SIAJFMB</span></div>
+  <div id="headerProgLabel" class="header-autosave">—</div>
+  <div class="header-spacer"></div>
+  <div id="autosaveStatus" class="header-autosave">💾 —</div>
+  <div class="header-btns">
+    <button class="hbtn" id="btnModoEntrevista" title="Modo Entrevista Progressiva">🎯 <span class="btn-label">Entrevista</span></button>
+    <button class="hbtn" id="btnModoCliente" title="Modo Cliente (oculta análise)">👁️ <span class="btn-label">Cliente</span></button>
+    <button class="hbtn" id="btnQR" title="QR Code da sessão">📱</button>
+    <button class="hbtn" id="btnAssinatura" title="Colher assinatura do cliente">✍️</button>
+    <button class="hbtn" id="btnTheme" title="Alternar tema">🌙</button>
+  </div>
+</div>
+
+<!-- SECTION TABS -->
+<div class="section-tabs-wrap" id="sectionTabs"></div>
+
+<!-- BODY -->
+<div class="app-body">
+
+  <!-- FORM COL -->
+  <div class="form-col">
+    <div class="form-container">
+      <div class="form-header">
+        <div class="badge">⚖️ SIAJFMB v5.0 • FORMULÁRIO INTELIGENTE PROFISSIONAL</div>
+        <h1>📋 Entrevista Trabalhista</h1>
+        <p>Score ao vivo · Alertas jurídicos · Autosave · Assinatura digital · QR de sessão</p>
+      </div>
+      <div id="progressBar"><div id="progressBarInner" style="width:0%"></div><div id="progressLabel">0% concluído</div></div>
+      <div id="formVertical"></div>
+
+      <div id="signatureSection" style="margin-top:16px;display:none;">
+        <div class="live-card">
+          <div class="live-card-title">✍️ ASSINATURA DO CLIENTE</div>
+          <img id="sigPreview" class="sig-preview" alt="Assinatura" style="display:none">
+          <div id="sigTimestamp" style="font-size:.68rem;color:var(--tx3);margin-top:4px;"></div>
+        </div>
+      </div>
+
+      <div class="summary-box">
+        <h3>🧾 Resumo automático da entrevista</h3>
+        <textarea id="resumoFinal" rows="12" placeholder="Clique em 'Gerar resumo' ou preencha o formulário..."></textarea>
+      </div>
+
+      <div class="button-bar">
+        <div class="btn-grp">
+          <button id="btnGerarResumo">🧠 Gerar resumo</button>
+          <button id="btnCopiarResumo" class="btn-sec">📋 Copiar</button>
+          <button id="btnWhatsApp" class="btn-whats">📲 WhatsApp</button>
+        </div>
+        <div class="btn-grp">
+          <button id="btnLimpar" class="btn-danger">🗑️ Novo atendimento</button>
+          <button id="btnImprimir" class="btn-sec">🖨️ Imprimir / PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVE PANEL -->
+  <div class="live-col" id="liveCol">
+
+    <div class="live-card">
+      <div class="live-card-title">📊 SCORE DE VIABILIDADE</div>
+      <div class="gauge-wrap">
+        <svg class="gauge-svg" viewBox="0 0 200 115" id="gaugeSvg">
+          <defs>
+            <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#dc2626"/>
+              <stop offset="45%" stop-color="#d97706"/>
+              <stop offset="100%" stop-color="#16a34a"/>
+            </linearGradient>
+          </defs>
+          <path d="M20 105 A80 80 0 0 1 180 105" fill="none" stroke="var(--bd2)" stroke-width="18" stroke-linecap="round"/>
+          <path id="gaugeArc" d="M20 105 A80 80 0 0 1 180 105" fill="none" stroke="url(#gaugeGrad)" stroke-width="18" stroke-linecap="round" stroke-dasharray="0 251" style="transition:stroke-dasharray .6s ease"/>
+          <text x="100" y="85" text-anchor="middle" class="gauge-score" id="gaugeScoreTxt">0</text>
+          <text x="100" y="100" text-anchor="middle" class="gauge-label" id="gaugeViabTxt">SEM DADOS</text>
+          <text x="20" y="115" text-anchor="middle" font-size="9" fill="#dc2626" font-family="Inter,sans-serif">0</text>
+          <text x="180" y="115" text-anchor="middle" font-size="9" fill="#16a34a" font-family="Inter,sans-serif">100</text>
+        </svg>
+        <div class="gauge-valor" id="gaugeValor">R$ 0,00</div>
+        <div class="gauge-viab" id="gaugeViabLabel">Preencha o formulário</div>
+      </div>
+    </div>
+
+    <div class="live-card" id="timelineCard" style="display:none">
+      <div class="live-card-title">📅 LINHA DO TEMPO</div>
+      <div class="timeline-wrap"><svg class="timeline-svg" id="timelineSvg" height="70"></svg></div>
+    </div>
+
+    <div class="live-card" id="violacoesCard">
+      <div class="live-card-title">⚖️ VIOLAÇÕES DETECTADAS <span id="violCount" style="background:var(--er);color:#fff;border-radius:999px;padding:1px 7px;font-size:.6rem;">0</span></div>
+      <div id="violacoesList"><div style="font-size:.72rem;color:var(--tx3);text-align:center;padding:12px 0;">Nenhuma violação detectada ainda</div></div>
+    </div>
+
+    <div class="live-card" id="alertasCard">
+      <div class="live-card-title">🔔 ALERTAS JURÍDICOS</div>
+      <div id="alertasList"><div style="font-size:.72rem;color:var(--tx3);text-align:center;padding:12px 0;">Sem alertas no momento</div></div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- MODAL INSALUBRIDADE -->
+<div class="modal-overlay" id="modalInsalubridade">
+<div class="modal-box">
+  <div class="modal-header"><h2>⚠️ Detalhamento — Insalubridade &amp; Periculosidade</h2><button class="modal-close" id="modalFechar">✕</button></div>
+  <div class="modal-body">
+    <div class="modal-group"><div class="modal-group-title">🌡️ Temperaturas Extremas</div>
+      <div class="modal-item"><label class="modal-check-label"><input type="checkbox" data-insalub="tempCalor"><div><div class="modal-item-title">Calor excessivo</div><div class="modal-item-desc">Fornos, caldeiras, trabalho ao sol, fundições.</div></div></label></div>
+      <div class="modal-item"><label class="modal-check-label"><input type="checkbox" data-insalub="tempFrio"><div><div class="modal-item-title">Câmaras frigoríficas / frio intenso</div><div class="modal-item-desc">Freezers industriais, câmaras frias permanentes.</div></div></label></div>
+    </div>
+    <div class="modal-group"><div class="modal-group-title">💧 Umidade</div>
+      <div class="modal-item"><label class="modal-check-label"><input type="checkbox" data-insalub="umidade"><div><div class="modal-item-title">Ambiente constantemente úmido</div><div class="modal-item-desc">Lavanderias, lava-rápidos, piso molhado durante toda a jornada.</div></div></label></div>
+    </div>
+    <div class="modal-group"><div class="modal-group-title">🧪 Produtos Químicos</div>
+      <div class="modal-item"><label class="modal-check-label"><input type="checkbox" data-insalub="quimicoContato"><div><div class="modal-item-title">Contato direto com químicos</div><div class="modal-item-desc">Solventes, tintas, ácidos, desinfetantes concentrados.</div></div></label></div>
+      <div class="modal-item"><label class="modal-check-label"><input type="checkbox" data-insalub="quimicoInalacao"><div><div class="modal-item-title">Inalação de vapores / névoas</div><div class="modal-item-desc">Thinner, benzeno, amônia, fumos de solda.</div></div></label></div>
+    </div>
+    <div class="modal-group"><div class="modal-group-title">🦠 Agentes Biológicos</div>
+      <div class="modal-item"><label class="modal-check-label"><input type="checkbox" data-insalub="bioLixo"><div><div class="modal-item-title">Lixo orgânico / esgoto / dejetos</div><div class="modal-item-desc">Coleta de lixo urbano, limpeza de esgoto.</div></div></label></div>
+      <div class="modal-item"><label class="modal-check-label"><input type="checkbox" data-insalub="bioFluidos"><div><div class="modal-item-title">Sangue / fluidos corporais</div><div class="modal-item-desc">Hospitais, laboratórios, higienização hospitalar.</div></div></label></div>
+    </div>
+    <div class="modal-group"><div class="modal-group-title">🔊 Ruído</div>
+      <div class="modal-item"><label class="modal-check-label"><input type="checkbox" data-insalub="ruido"><div><div class="modal-item-title">Barulho intenso e contínuo</div><div class="modal-item-desc">Máquinas, prensas, compressores, moto-serras.</div></div></label></div>
+    </div>
+    <div class="modal-group"><div class="modal-group-title">🗑️ Limpeza &amp; Lixo</div>
+      <div class="modal-item"><label class="modal-check-label"><input type="checkbox" data-insalub="limpezaBanheiro"><div><div class="modal-item-title">Limpeza de banheiros coletivos</div><div class="modal-item-desc">Grau MÁXIMO se +20 usuários/dia (NR-15).</div></div></label></div>
+      <div class="modal-item"><label class="modal-check-label"><input type="checkbox" data-insalub="recolheLixo"><div><div class="modal-item-title">Recolhimento de lixo orgânico</div><div class="modal-item-desc">Cestos de banheiro com material higiênico usado.</div></div></label></div>
+    </div>
+    <div class="modal-group"><div class="modal-group-title">⚡ Periculosidade Elétrica</div>
+      <div class="modal-item"><label class="modal-check-label"><input type="checkbox" data-insalub="eletrico"><div><div class="modal-item-title">Alta tensão / painéis elétricos</div><div class="modal-item-desc">Subestações, redes energizadas, eletricistas.</div></div></label></div>
+    </div>
+    <div class="modal-group"><div class="modal-group-title">⛽ Inflamáveis / Explosivos</div>
+      <div class="modal-item"><label class="modal-check-label"><input type="checkbox" data-insalub="inflamavel"><div><div class="modal-item-title">Trabalho com inflamáveis</div><div class="modal-item-desc">Postos de gasolina, depósitos, transporte de combustível.</div></div></label></div>
+    </div>
+    <div class="modal-group"><div class="modal-group-title">🏍️ Periculosidade por Atividade</div>
+      <div class="modal-item"><label class="modal-check-label"><input type="checkbox" data-insalub="moto"><div><div class="modal-item-title">Motocicleta como ferramenta de trabalho</div><div class="modal-item-desc">Motoboys, entregadores, técnicos externos.</div></div></label></div>
+      <div class="modal-item"><label class="modal-check-label"><input type="checkbox" data-insalub="vigilante"><div><div class="modal-item-title">Vigilante / segurança patrimonial</div><div class="modal-item-desc">Exposição habitual a risco físico / violência.</div></div></label></div>
+    </div>
+    <div class="modal-group"><div class="modal-group-title">🛡️ EPIs</div>
+      <div class="modal-item"><label class="modal-check-label"><input type="checkbox" data-insalub="epiNaoFornecido"><div><div class="modal-item-title">EPIs não fornecidos ou insuficientes</div><div class="modal-item-desc">Empresa omissa no fornecimento de proteção.</div></div></label></div>
+      <div class="modal-item"><label class="modal-check-label"><input type="checkbox" data-insalub="epiIneficaz"><div><div class="modal-item-title">EPIs fornecidos mas ineficazes</div><div class="modal-item-desc">Máscara rasgada, luvas furadas, protetor auricular reaproveitado.</div></div></label></div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-sec" id="modalCancelar" style="padding:7px 16px;font-size:.8rem;">✕ Cancelar</button>
+    <button id="modalConfirmar" style="padding:7px 16px;font-size:.8rem;">✅ Confirmar</button>
+  </div>
+</div>
+</div>
+
+<!-- MODAL ASSINATURA -->
+<div class="modal-overlay" id="modalAssinatura">
+<div class="modal-box" style="max-width:500px;">
+  <div class="modal-header"><h2>✍️ Assinatura do Cliente</h2><button class="modal-close" id="sigFechar">✕</button></div>
+  <div class="modal-body" style="max-height:none;">
+    <p style="font-size:.75rem;color:var(--tx2);margin-bottom:10px;">
+      <em>"Declaro que as informações prestadas nesta entrevista são verdadeiras e de minha responsabilidade."</em>
+    </p>
+    <canvas id="signatureCanvas" width="440" height="160"></canvas>
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <button id="sigLimpar" class="btn-sec" style="padding:7px 14px;font-size:.78rem;">🗑️ Limpar</button>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-sec" id="sigCancelar" style="padding:7px 16px;font-size:.8rem;">Cancelar</button>
+    <button id="sigConfirmar" class="btn-ok" style="padding:7px 16px;font-size:.8rem;">✅ Confirmar Assinatura</button>
+  </div>
+</div>
+</div>
+
+<!-- MODAL QR -->
+<div class="modal-overlay" id="modalQR">
+<div class="modal-box" style="max-width:360px;">
+  <div class="modal-header"><h2>📱 QR Code da Sessão</h2><button class="modal-close" id="qrFechar">✕</button></div>
+  <div class="modal-body" style="text-align:center;padding:24px 20px;">
+    <canvas id="qrCanvas"></canvas>
+    <div class="qr-instrucao">Escaneie para continuar em outro dispositivo ou reabrir esta entrevista mais tarde.</div>
+    <div id="qrAviso" style="font-size:.65rem;color:var(--er);margin-top:8px;"></div>
+  </div>
+  <div class="modal-footer"><button id="qrFecharBtn" style="padding:7px 16px;font-size:.8rem;">Fechar</button></div>
+</div>
+</div>
+
+<!-- PRINT VIEW -->
+<div id="printView"></div>
+
+<script>
+// ═══════════════════════════════════════
+// UTILITÁRIOS
+// ═══════════════════════════════════════
+function valor(id){const el=document.getElementById(id);return el?(el.value||'').trim():'';}
+function setVal(id,v){const el=document.getElementById(id);if(el){el.value=v;if(el.tagName==='TEXTAREA')autoEx(el);}}
+function autoEx(el){if(!el||el.tagName!=='TEXTAREA')return;if(!el.dataset.mh){const cs=window.getComputedStyle(el);const ln=parseFloat(cs.lineHeight)||19;const pd=(parseFloat(cs.paddingTop)||0)+(parseFloat(cs.paddingBottom)||0);const bd=(parseFloat(cs.borderTopWidth)||0)+(parseFloat(cs.borderBottomWidth)||0);const rows=parseInt(el.getAttribute('rows')||'1',10);el.dataset.mh=String(Math.ceil(Math.max(el.offsetHeight||0,(ln*rows)+pd+bd,38)));}const mh=parseInt(el.dataset.mh||'38',10);el.style.height='0px';el.style.height=Math.max(mh,el.scrollHeight+2)+'px';}
+function ajustarTAs(root=document){root.querySelectorAll('textarea').forEach(el=>autoEx(el));}
+function parseMoeda(s){if(!s)return 0;return parseFloat(s.replace(/\./g,'').replace(',','.'))||0;}
+function fmtMoeda(n){return n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});}
+function fmtDate(s){if(!s)return '';const d=new Date(s+'T00:00:00');return isNaN(d)?s:d.toLocaleDateString('pt-BR');}
+
+// TOAST
+function toast(msg,tipo='',dur=3200){const c=document.getElementById('toastContainer');const t=document.createElement('div');t.className='toast'+(tipo?' '+tipo:'');t.textContent=msg;c.appendChild(t);setTimeout(()=>{t.classList.add('hide');setTimeout(()=>t.remove(),300);},dur);}
+
+// TEMA
+let _tema=localStorage.getItem('siajfmb_tema')||'light';
+function aplicarTema(t){_tema=t;document.documentElement.setAttribute('data-theme',t);['btnTheme','splashThemeBtn'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t==='dark'?'☀️':'🌙';});localStorage.setItem('siajfmb_tema',t);}
+aplicarTema(_tema);
+document.getElementById('btnTheme').addEventListener('click',()=>aplicarTema(_tema==='dark'?'light':'dark'));
+document.getElementById('splashThemeBtn').addEventListener('click',()=>aplicarTema(_tema==='dark'?'light':'dark'));
+
+// ═══════════════════════════════════════
+// CAMPOS
+// ═══════════════════════════════════════
+const campos=[
+  // DADOS DA ENTREVISTA
+  {id:"dataAtendimento",label:"📅 DATA DO ATENDIMENTO:",tipo:"date",autoHoje:true},
+  {id:"entrevistador",label:"🧑‍⚖️ ENTREVISTADOR(A):",tipo:"text",ph:"Nome do advogado responsável"},
+  {id:"entrevistado",label:"👤 ENTREVISTADO(A):",tipo:"text",ph:"Nome completo do trabalhador"},
+  // DADOS PESSOAIS
+  {id:"cpfReclamante",label:"🪪 CPF:",tipo:"text",mask:"cpf",ph:"000.000.000-00"},
+  {id:"rgReclamante",label:"🪪 RG:",tipo:"text",ph:"Número + órgão emissor"},
+  {id:"dataNascimento",label:"🎂 DATA DE NASCIMENTO:",tipo:"date"},
+  {id:"estadoCivil",label:"💍 ESTADO CIVIL:",tipo:"select",opcoes:["","Solteiro(a)","Casado(a)","Divorciado(a)","Viúvo(a)","União estável"]},
+  {id:"telefonePrincipal",label:"📱 TELEFONE / WHATSAPP:",tipo:"text",mask:"telefone",ph:"(00) 00000-0000"},
+  {id:"emailReclamante",label:"📧 E-MAIL:",tipo:"text",ph:"email@email.com"},
+  {id:"cepReclamante",label:"📮 CEP (residência):",tipo:"text",mask:"cep",ph:"00000-000",apiCep:"reclamante"},
+  {id:"enderecoReclamante",label:"🏠 LOGRADOURO:",tipo:"text",ph:"Preenchido pelo CEP"},
+  {id:"numeroEndReclamante",label:"🔢 NÚMERO:",tipo:"text",ph:"123"},
+  {id:"complementoReclamante",label:"🏘️ COMPLEMENTO:",tipo:"text",ph:"Apto, Casa..."},
+  {id:"bairroReclamante",label:"🗺️ BAIRRO:",tipo:"text",ph:""},
+  {id:"cidadeReclamante",label:"🌆 CIDADE:",tipo:"text",ph:""},
+  {id:"ufReclamante",label:"🏳️ UF:",tipo:"text",ph:"SP"},
+  {id:"possuiHipossuficiencia",label:"📉 DECLARA HIPOSSUFICIÊNCIA ECONÔMICA?",tipo:"select",opcoes:["","Sim","Não"]},
+  // EMPRESA & VÍNCULO
+  {id:"cnpj",label:"🔢 CNPJ DA EMPRESA:",tipo:"text",mask:"cnpj",ph:"00.000.000/0001-00",apiCnpj:true},
+  {id:"nomeEmpresa",label:"🏢 RAZÃO SOCIAL:",tipo:"text",ph:"Preenchida pelo CNPJ"},
+  {id:"cepEmpresa",label:"📮 CEP DA EMPRESA:",tipo:"text",mask:"cep",ph:"00000-000",apiCep:"empresa"},
+  {id:"enderecoEmpresa",label:"📍 ENDEREÇO DA EMPRESA:",tipo:"text",ph:"Preenchido automaticamente"},
+  {id:"localTrabalho",label:"🏭 LOCAL DE TRABALHO:",tipo:"text",ph:"Endereço físico onde trabalhava"},
+  {id:"tipoVinculo",label:"📄 TIPO DE VÍNCULO:",tipo:"select",opcoes:["","CLT urbano","CLT rural","Doméstico","Aprendiz","Intermitente","Terceirizado","Outro"]},
+  {id:"primeiroDia",label:"📅 PRIMEIRO DIA TRABALHADO:",tipo:"date"},
+  {id:"dataRegistro",label:"📆 DATA DO REGISTRO (CTPS):",tipo:"date"},
+  {id:"aindaTrabalhando",label:"🟢 AINDA ESTÁ TRABALHANDO?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"ultimoDia",label:"⏱️ ÚLTIMO DIA TRABALHADO:",tipo:"date",dependenteDe:"aindaTrabalhando",dependenteValor:"Não"},
+  {id:"formaDemissao",label:"⚖️ FORMA DE DEMISSÃO:",tipo:"select",opcoes:["","Sem justa causa","Pedido de demissão","Justa causa","Rescisão indireta - vai continuar trabalhando","Rescisão indireta - vai parar de trabalhar (enviar telegrama)","Comum acordo (§6º art.477)","Término de contrato"],dependenteDe:"aindaTrabalhando",dependenteValor:"Não"},
+  {id:"justaCausaMotivo",label:"⚠️ ATO FALTOSO IMPUTADO (justa causa):",tipo:"textarea",rows:2,ph:"Ex: desídia, abandono de emprego... descreva o que aconteceu.",dependenteDe:"formaDemissao",dependenteValor:"Justa causa"},
+  {id:"motivoPedido",label:"💬 MOTIVO DO PEDIDO DE DEMISSÃO:",tipo:"text",ph:"Ex: sobrecarga, assédio, outra proposta...",dependenteDe:"formaDemissao",dependenteValor:"Pedido de demissão"},
+  {id:"telegrama",label:"📨 ENVIAR TELEGRAMA?",tipo:"select",opcoes:["","Sim, já solicitado","Não necessário","Pendente análise"],dependenteDe:"formaDemissao",dependenteValor:"Rescisão indireta - vai parar de trabalhar (enviar telegrama)"},
+  {id:"outrasEmpresas",label:"🏢 OUTRAS EMPRESAS (grupo econômico, tomadora):",tipo:"textarea",rows:2,ph:"Nome, CNPJ, relação..."},
+  {id:"eraTerceirizado",label:"🔗 ERA TERCEIRIZADO?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"empresaTomadora",label:"🏭 EMPRESA TOMADORA:",tipo:"text",ph:"Nome e CNPJ",dependenteDe:"eraTerceirizado",dependenteValor:"Sim"},
+  // CONTRATO & REGISTRO
+  {id:"trabalhouAntesCTPS",label:"📋 TRABALHOU ANTES DE REGISTRAR A CTPS?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"periodoSemRegistro",label:"📅 PERÍODO SEM REGISTRO:",tipo:"text",ph:"Ex: 2 meses antes de assinar",dependenteDe:"trabalhouAntesCTPS",dependenteValor:"Sim"},
+  {id:"contratoExperiencia",label:"📝 CONTRATO DE EXPERIÊNCIA?",tipo:"select",opcoes:["","Sim","Não","Não sabe"]},
+  {id:"prazoContrato",label:"📅 PRAZO DO CONTRATO:",tipo:"text",ph:"Ex: 45 dias prorrogado por mais 45",dependenteDe:"contratoExperiencia",dependenteValor:"Sim"},
+  {id:"renovouContrato",label:"🔄 RENOVOU O CONTRATO?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"contratoExperiencia",dependenteValor:"Sim"},
+  {id:"quantasRenovacoes",label:"🔢 QUANTAS RENOVAÇÕES?",tipo:"text",ph:"⚠️ Mais de 1 pode configurar prazo indeterminado",dependenteDe:"renovouContrato",dependenteValor:"Sim",hint:"ℹ️ Art. 452 CLT: só é possível uma prorrogação. Mais de uma = contrato por prazo indeterminado."},
+  {id:"mudancaLocalTrabalho",label:"🔄 HOUVE MUDANÇA DO LOCAL DE TRABALHO?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"detalhesMudancaLocal",label:"📝 DETALHE A MUDANÇA:",tipo:"text",ph:"Ex: transferência de SP para RJ sem anuência",dependenteDe:"mudancaLocalTrabalho",dependenteValor:"Sim"},
+  // FUNÇÃO & ATIVIDADES
+  {id:"funcao",label:"📌 FUNÇÃO REGISTRADA NA CTPS:",tipo:"text",ph:"Cargo oficial"},
+  {id:"atividades",label:"📋 ATIVIDADES DO DIA A DIA:",tipo:"textarea",rows:2,ph:"Descreva detalhadamente a rotina real de trabalho"},
+  {id:"alteracaoFuncao",label:"🔄 HOUVE ALTERAÇÃO DE FUNÇÃO?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"qualAlteracao",label:"✏️ QUAL ALTERAÇÃO?",tipo:"text",ph:"Ex: de auxiliar para operador",dependenteDe:"alteracaoFuncao",dependenteValor:"Sim"},
+  {id:"acumuloFuncao",label:"📚 TINHA ACÚMULO DE FUNÇÃO?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"funcoesAcumuladas",label:"⚙️ QUAIS FUNÇÕES ACUMULADAS?",tipo:"textarea",rows:2,ph:"Descreva todas as funções além da registrada",dependenteDe:"acumuloFuncao",dependenteValor:"Sim"},
+  {id:"ctpsAnotacoes",label:"📝 A CTPS TEM TODAS AS ANOTAÇÕES CORRETAS?",tipo:"select",opcoes:["","Sim","Não","Não verificou"]},
+  // SALÁRIO
+  {id:"ultimoSalario",label:"💵 ÚLTIMO SALÁRIO (R$):",tipo:"text",moeda:true,ph:"0,00"},
+  {id:"valorPorFora",label:"📦 RECEBIA VALOR POR FORA?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"quantoPorFora",label:"💸 QUANTO POR FORA? (R$)",tipo:"text",moeda:true,dependenteDe:"valorPorFora",dependenteValor:"Sim"},
+  {id:"holerite",label:"🧾 RECEBIA HOLERITE?",tipo:"select",opcoes:["","Sim, todos os meses","Às vezes","Não recebia"]},
+  {id:"formaRecebimento",label:"💳 FORMA DE RECEBIMENTO:",tipo:"select",opcoes:["","Depósito bancário","Dinheiro","Pix","Cheque","Misto","Outro"]},
+  {id:"pagamentoEmDia",label:"📅 SALÁRIO EM DIA?",tipo:"select",opcoes:["","Sim, sempre","Às vezes atrasava","Frequentes atrasos"]},
+  {id:"frequenciaAtrasos",label:"⏳ FREQUÊNCIA DOS ATRASOS:",tipo:"text",ph:"Ex: atrasava 5 a 10 dias",dependeDeAtraso:true},
+  {id:"salarioNaoPago",label:"⚠️ SALÁRIO DEIXOU DE SER PAGO?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"mesesAberto",label:"📆 MESES EM ABERTO:",tipo:"text",ph:"Ex: jan e fev/2026",dependenteDe:"salarioNaoPago",dependenteValor:"Sim"},
+  {id:"diferencaSalarial",label:"⚖️ COLEGA FAZIA O MESMO E RECEBIA MAIS?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"nomeColega",label:"👤 NOME DO COLEGA:",tipo:"text",ph:"Nome completo",dependenteDe:"diferencaSalarial",dependenteValor:"Sim"},
+  {id:"funcaoColega",label:"📌 FUNÇÃO DO COLEGA:",tipo:"text",ph:"Cargo",dependenteDe:"diferencaSalarial",dependenteValor:"Sim"},
+  {id:"salarioColega",label:"💰 SALÁRIO DO COLEGA (R$):",tipo:"text",moeda:true,dependenteDe:"diferencaSalarial",dependenteValor:"Sim"},
+  {id:"tempoColega",label:"⏱️ HÁ QUANTO TEMPO O COLEGA ESTÁ?",tipo:"text",ph:"Ex: 2 anos a mais",dependenteDe:"diferencaSalarial",dependenteValor:"Sim"},
+  {id:"gratificacaoFuncao",label:"🎁 RECEBIA GRATIFICAÇÃO DE FUNÇÃO?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"valorGratificacao",label:"💰 VALOR DA GRATIFICAÇÃO (R$):",tipo:"text",moeda:true,dependenteDe:"gratificacaoFuncao",dependenteValor:"Sim"},
+  {id:"adicionalNoturnoRecebido",label:"🌙 RECEBIA ADICIONAL NOTURNO?",tipo:"select",opcoes:["","Sim","Não","Não trabalhava após 22h"]},
+  {id:"reducaoSalarial",label:"📉 HOUVE REDUÇÃO SALARIAL?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"detalheReducao",label:"📝 DETALHE DA REDUÇÃO:",tipo:"text",ph:"Ex: de R$ 2.000 para R$ 1.800 em jan/2025",dependenteDe:"reducaoSalarial",dependenteValor:"Sim"},
+  // AUXÍLIOS
+  {id:"valeRefeicaoSim",label:"🍽️ VALE REFEIÇÃO / ALIMENTAÇÃO:",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"valeRefeicaoValor",label:"💰 VALOR DO VR/VA (R$):",tipo:"text",moeda:true,dependenteDe:"valeRefeicaoSim",dependenteValor:"Sim"},
+  {id:"valeTransporteSim",label:"🚌 VALE TRANSPORTE:",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"valeTransporteForma",label:"📌 FORMA DO VT:",tipo:"select",opcoes:["","Cartão de transporte","Dinheiro"],dependenteDe:"valeTransporteSim",dependenteValor:"Sim"},
+  {id:"valeTransporteOptouNao",label:"❌ OPTOU POR NÃO RECEBER VT?",tipo:"select",opcoes:["","Sim — assinou termo","Não — empresa não pagava"],dependenteDe:"valeTransporteSim",dependenteValor:"Não"},
+  {id:"deslocamento",label:"🚍 COMO IA TRABALHAR?",tipo:"text",ph:"Ex: 2 ônibus ida + 1 volta · carro próprio"},
+  {id:"cestaBasicaSim",label:"📦 CESTA BÁSICA:",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"cestaBasicaTipo",label:"🛒 FORMA DA CESTA:",tipo:"select",opcoes:["","Alimentos in natura","Dinheiro / crédito"],dependenteDe:"cestaBasicaSim",dependenteValor:"Sim"},
+  {id:"cestaBasicaValor",label:"💰 VALOR DA CESTA (R$):",tipo:"text",moeda:true,dependenteDe:"cestaBasicaTipo",dependenteValor:"Dinheiro / crédito"},
+  {id:"planoSaude",label:"🏥 PLANO DE SAÚDE / ODONTOLÓGICO:",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"outrosAuxilios",label:"🎁 OUTROS AUXÍLIOS:",tipo:"textarea",rows:2,ph:"Ex: Gympass, auxílio-creche, convênio farmácia..."},
+  // JORNADA
+  {id:"tipoEscala",label:"📋 TIPO DE ESCALA:",tipo:"select",opcoes:["","8h/dia · 44h/semana (CLT padrão)","12x36","5x1 (supermercado)","6x1","5x2 (folga sáb+dom)","Outra"]},
+  {id:"jornDiaInicio",label:"📅 INÍCIO DA SEMANA:",tipo:"select",opcoes:["","Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado","Domingo"],dependenteDe:"tipoEscala",dependenteValor:"8h/dia · 44h/semana (CLT padrão)"},
+  {id:"jornDiaFim",label:"📅 FIM DA SEMANA:",tipo:"select",opcoes:["","Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado","Domingo"],dependenteDe:"tipoEscala",dependenteValor:"8h/dia · 44h/semana (CLT padrão)"},
+  {id:"jornEntrada",label:"🕐 HORÁRIO DE ENTRADA:",tipo:"time",dependenteDe:"tipoEscala",dependenteValor:"8h/dia · 44h/semana (CLT padrão)"},
+  {id:"jornSaida",label:"🕕 HORÁRIO DE SAÍDA:",tipo:"time",dependenteDe:"tipoEscala",dependenteValor:"8h/dia · 44h/semana (CLT padrão)"},
+  {id:"diasSemana",label:"📆 DIAS DA SEMANA TRABALHADOS:",tipo:"text",ph:"Ex: seg a sex · seg a sáb",dependeDeEscalaOutra:true},
+  {id:"trabalhaSabado",label:"📅 TRABALHAVA AOS SÁBADOS?",tipo:"select",opcoes:["","Sim","Não"],dependeSemana:"sabado"},
+  {id:"quantosSabados",label:"🔢 QUANTOS SÁBADOS/MÊS?",tipo:"text",ph:"Ex: todos · 2 sábados",dependenteDe:"trabalhaSabado",dependenteValor:"Sim"},
+  {id:"horarioSabado",label:"🕒 HORÁRIO AOS SÁBADOS:",tipo:"text",ph:"Ex: 08h às 14h",dependenteDe:"trabalhaSabado",dependenteValor:"Sim"},
+  {id:"trabalhaDomingo",label:"📅 TRABALHAVA AOS DOMINGOS?",tipo:"select",opcoes:["","Sim","Não"],dependeSemana:"domingo"},
+  {id:"quantosDomingos",label:"🔢 QUANTOS DOMINGOS/MÊS?",tipo:"text",ph:"Ex: todos · 1 domingo",dependenteDe:"trabalhaDomingo",dependenteValor:"Sim"},
+  {id:"horarioDomingo",label:"🕒 HORÁRIO AOS DOMINGOS:",tipo:"text",ph:"Ex: 08h às 17h",dependenteDe:"trabalhaDomingo",dependenteValor:"Sim"},
+  {id:"trabalhavaFeriados",label:"🎉 TRABALHAVA EM FERIADOS?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"quantosFeriados",label:"🔢 QUANTOS FERIADOS/ANO?",tipo:"text",ph:"Ex: todos os nacionais e municipais",dependenteDe:"trabalhavaFeriados",dependenteValor:"Sim"},
+  {id:"horarioCombinado",label:"🕒 HORÁRIO COMBINADO NA ADMISSÃO:",tipo:"text",ph:"Ex: 08h às 17h"},
+  {id:"horarioReal",label:"⏱️ HORÁRIO REAL (chegada e saída):",tipo:"text",ph:"Ex: chegava 7h30, saía 19h"},
+  {id:"trabalhoApos22h",label:"🌙 TRABALHAVA APÓS AS 22H?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"horasApos22h",label:"⏰ HORÁRIO APÓS 22H:",tipo:"text",ph:"Ex: saía 00h, trabalhava das 22h às 6h",dependenteDe:"trabalhoApos22h",dependenteValor:"Sim"},
+  {id:"intervalo",label:"🍽️ INTERVALO INTRAJORNADA:",tipo:"select",opcoes:["","Sim, 1 hora completa","Sim, menos de 1 hora","Não tinha intervalo"]},
+  {id:"tempoIntervalo",label:"⏲️ QUANTO TEMPO DE INTERVALO?",tipo:"text",ph:"Ex: 20 minutos",dependenteDe:"intervalo",dependenteValor:"Sim, menos de 1 hora"},
+  {id:"localRefeicao",label:"🍴 LOCAL ADEQUADO PARA REFEIÇÃO?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"horasExtrasCorretas",label:"⏰ RECEBIA HORAS EXTRAS CORRETAMENTE?",tipo:"select",opcoes:["","Sim","Não","Parcialmente"]},
+  {id:"mediaHe",label:"➕ QTD DE HE POR DIA:",tipo:"text",ph:"Ex: 2",dependeDeHorasExtras:true},
+  {id:"heUnidade",label:"📏 ESSA QUANTIDADE ESTÁ EM:",tipo:"select",opcoes:["","horas","minutos"],dependeDeHorasExtras:true,hint:"⚠️ ATENÇÃO: 50 minutos ≠ 50 horas. Erro aqui distorce toda a estimativa."},
+  {id:"batiaPonto",label:"🖊️ BATIA PONTO?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"pontoVoltar",label:"⚠️ BATIA PONTO E VOLTAVA A TRABALHAR?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"batiaPonto",dependenteValor:"Sim"},
+  {id:"tipoPonto",label:"📄 TIPO DE PONTO:",tipo:"select",opcoes:["","Manual/papel","Digital/eletrônico","Biométrico","APP","Crachá"],dependenteDe:"batiaPonto",dependenteValor:"Sim"},
+  {id:"bancoHoras",label:"🏦 EXISTIA BANCO DE HORAS?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"bancoHorasAcordo",label:"📄 HAVIA ACORDO COLETIVO PARA BANCO DE HORAS?",tipo:"select",opcoes:["","Sim","Não","Não sabe"],dependenteDe:"bancoHoras",dependenteValor:"Sim"},
+  // EPI & SEGURANÇA
+  {id:"recebiaepi",label:"🦺 RECEBIA EPI?",tipo:"select",opcoes:["","Sim, todos","Parcialmente","Não recebia"]},
+  {id:"tiposEPI",label:"📝 QUAIS EPIs?",tipo:"textarea",rows:2,ph:"Ex: capacete, luva, bota, protetor auricular..."},
+  {id:"epiAdequado",label:"✅ EPI ERA ADEQUADO?",tipo:"select",opcoes:["","Sim","Não","Parcialmente"]},
+  {id:"assinavaFichaEPI",label:"📋 ASSINAVA FICHA DE EPI?",tipo:"select",opcoes:["","Sim","Não","Não sabe"]},
+  {id:"treinamentoSeguranca",label:"🎓 RECEBIA TREINAMENTO DE SEGURANÇA?",tipo:"select",opcoes:["","Sim","Não"]},
+  // VERBAS & RESCISÃO
+  {id:"avisoPrevio",label:"📢 AVISO PRÉVIO:",tipo:"select",opcoes:["","Cumprido trabalhando","Indenizado","Dispensado sem pagamento","Não houve","Não sabe"],dependenteDe:"aindaTrabalhando",dependenteValor:"Não"},
+  {id:"diasAvisoPrevio",label:"📅 QUANTOS DIAS DE AVISO?",tipo:"text",ph:"Ex: 30 dias + proporcional",dependenteDe:"aindaTrabalhando",dependenteValor:"Não"},
+  {id:"decimoTerceiro",label:"🎄 RECEBEU 13º?",tipo:"select",opcoes:["","Sim, integral","Sim, parcial","Não recebeu","Não sabe"]},
+  {id:"ferias",label:"🏖️ CHEGOU A TIRAR FÉRIAS?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"feriasVencidas",label:"📅 HAVIA FÉRIAS VENCIDAS?",tipo:"select",opcoes:["","Sim","Não","Não sabe"]},
+  {id:"valorFerias",label:"💰 QUANTO RECEBEU DE FÉRIAS? (R$)",tipo:"text",moeda:true,dependenteDe:"ferias",dependenteValor:"Sim"},
+  {id:"recebeuAcerto",label:"💼 RECEBEU ACERTO (RESCISÃO)?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"aindaTrabalhando",dependenteValor:"Não"},
+  {id:"valorAcerto",label:"💵 VALOR DO ACERTO (R$):",tipo:"text",moeda:true,dependenteDe:"recebeuAcerto",dependenteValor:"Sim"},
+  {id:"dataAcerto",label:"📅 DATA DO ACERTO:",tipo:"date",dependenteDe:"recebeuAcerto",dependenteValor:"Sim"},
+  {id:"assinouRecibo",label:"✍️ ASSINOU RECIBO?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"recebeuAcerto",dependenteValor:"Sim"},
+  {id:"multaFGTS",label:"💸 RECEBEU MULTA 40% FGTS?",tipo:"select",opcoes:["","Sim","Não","Não se aplica","Não sabe"],dependenteDe:"aindaTrabalhando",dependenteValor:"Não"},
+  {id:"fgtsCorreto",label:"🏦 FGTS DEPOSITADO CORRETAMENTE?",tipo:"select",opcoes:["","Sim, todos os meses","Não, faltam depósitos","Não sei"]},
+  // INSALUBRIDADE & PERICULOSIDADE
+  {id:"insalubridade",label:"🧪 INSALUBRIDADE:",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"ambienteUmido",label:"💧 AMBIENTE ÚMIDO?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"insalubridade",dependenteValor:"Sim"},
+  {id:"tempExtrema",label:"🌡️ AMBIENTE QUENTE OU FRIO?",tipo:"select",opcoes:["","Calor","Frio","Não"],dependenteDe:"insalubridade",dependenteValor:"Sim"},
+  {id:"barulhento",label:"🔊 AMBIENTE MUITO BARULHENTO?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"insalubridade",dependenteValor:"Sim"},
+  {id:"lixoBanheiro",label:"🗑️ RECOLHIA LIXO OU LIMPAVA BANHEIRO?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"insalubridade",dependenteValor:"Sim"},
+  {id:"pessoasBanheiro",label:"🧹 QUANTAS PESSOAS USAVAM O BANHEIRO/DIA?",tipo:"text",ph:"Ex: ~30 funcionários",dependenteDe:"lixoBanheiro",dependenteValor:"Sim",hint:"ℹ️ Mais de 20 usuários = grau MÁXIMO (NR-15)."},
+  {id:"quimicos",label:"🧪 CONTATO COM PRODUTOS QUÍMICOS?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"insalubridade",dependenteValor:"Sim"},
+  {id:"detalheQuimicos",label:"📝 QUAIS QUÍMICOS?",tipo:"textarea",rows:2,ph:"Ex: tinta, solvente, thinner, ácido...",dependenteDe:"quimicos",dependenteValor:"Sim"},
+  {id:"periculosidade",label:"🔥 PERICULOSIDADE:",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"energiaEletrica",label:"⚡ TRABALHAVA COM ENERGIA ELÉTRICA?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"periculosidade",dependenteValor:"Sim"},
+  {id:"inflamaveis",label:"⛽ TRABALHAVA COM INFLAMÁVEIS?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"periculosidade",dependenteValor:"Sim"},
+  {id:"detalheInflamaveis",label:"📝 QUAIS INFLAMÁVEIS?",tipo:"textarea",rows:2,ph:"Ex: gasolina, diesel, gás...",dependenteDe:"inflamaveis",dependenteValor:"Sim"},
+  // ACIDENTES, PUNIÇÕES & SAÚDE
+  {id:"punicao",label:"⚠️ SOFREU ALGUMA PUNIÇÃO?",tipo:"textarea",rows:2,ph:"Ex: advertência, suspensão, desconto indevido..."},
+  {id:"tipoPunicao",label:"📋 TIPO DE PUNIÇÃO:",tipo:"select",opcoes:["","Advertência verbal","Advertência escrita","Suspensão","Desconto indevido","Justa causa","Outra"]},
+  {id:"assedioMoral",label:"😤 SOFREU ASSÉDIO MORAL?",tipo:"select",opcoes:["","Sim","Não","Possível — verificar"]},
+  {id:"assedioMoralQuem",label:"👤 QUEM PRATICAVA?",tipo:"text",ph:"Ex: supervisor João, gerente Marcos...",dependenteDe:"assedioMoral",dependenteValor:"Sim"},
+  {id:"assedioMoralFrequencia",label:"📅 COM QUE FREQUÊNCIA?",tipo:"select",opcoes:["","Diariamente","Semanalmente","Esporadicamente"],dependenteDe:"assedioMoral",dependenteValor:"Sim"},
+  {id:"assedioMoralPublico",label:"👥 EM PÚBLICO?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"assedioMoral",dependenteValor:"Sim"},
+  {id:"assedioDescricao",label:"📝 DESCREVA O ASSÉDIO:",tipo:"textarea",rows:3,ph:"Episódios, humilhações, ameaças, metas abusivas...",dependenteDe:"assedioMoral",dependenteValor:"Sim"},
+  {id:"abaloPsico",label:"😔 SITUAÇÃO QUE ABALOU PSICOLOGICAMENTE:",tipo:"textarea",rows:2,ph:"Ex: pressão excessiva, humilhações, esgotamento..."},
+  {id:"testemunhas",label:"👥 TESTEMUNHA 1:",tipo:"text",ph:"Nome completo"},
+  {id:"testemunha2",label:"👥 TESTEMUNHA 2:",tipo:"text",ph:"Nome completo"},
+  {id:"testemunha3",label:"👥 TESTEMUNHA 3:",tipo:"text",ph:"Nome completo"},
+  {id:"ambienteDesc",label:"🏭 DESCREVA O AMBIENTE DE TRABALHO:",tipo:"textarea",rows:3,ph:"Ex: aberto, fechado, risco, trabalho em altura, contato com público..."},
+  {id:"acidente",label:"🚑 SOFREU ACIDENTE NO TRABALHO?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"detalhesAcidente",label:"📝 DETALHE O ACIDENTE:",tipo:"textarea",rows:3,ph:"Como aconteceu, local, causa, partes afetadas, consequências...",dependenteDe:"acidente",dependenteValor:"Sim"},
+  {id:"quandoAcidente",label:"📅 QUANDO?",tipo:"text",ph:"Ex: março/2025",dependenteDe:"acidente",dependenteValor:"Sim"},
+  {id:"afastamentoPrevio",label:"📋 HOUVE AFASTAMENTO PELO INSS?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"acidente",dependenteValor:"Sim"},
+  {id:"cat",label:"📄 FOI EMITIDO CAT?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"acidente",dependenteValor:"Sim"},
+  {id:"doencaOcupacional",label:"🏥 POSSUI DOENÇA OCUPACIONAL?",tipo:"select",opcoes:["","Sim","Não","Em investigação"]},
+  {id:"qualDoenca",label:"📋 QUAL DOENÇA?",tipo:"text",ph:"Ex: LER, DORT, hérnia de disco, perda auditiva...",dependenteDe:"doencaOcupacional",dependenteValor:"Sim"},
+  // ESTABILIDADE
+  {id:"estavelGestante",label:"👶 TRABALHADORA GRÁVIDA OU COM PARTO RECENTE?",tipo:"select",opcoes:["","Sim","Não","Não se aplica"]},
+  {id:"dataPartoGestante",label:"📅 DATA DO PARTO OU PREVISÃO:",tipo:"date",dependenteDe:"estavelGestante",dependenteValor:"Sim"},
+  {id:"estavelAcidente",label:"🏥 ESTABILIDADE POR ACIDENTE DE TRABALHO?",tipo:"select",opcoes:["","Sim — dentro dos 12 meses","Não","Não sabe"]},
+  {id:"estavelCipa",label:"🔧 ERA MEMBRO DA CIPA OU CANDIDATO?",tipo:"select",opcoes:["","Sim — membro efetivo","Sim — candidato","Não"]},
+  {id:"estavelDirigenteSindical",label:"🏛️ ERA DIRIGENTE SINDICAL?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"estavelPreAposentadoria",label:"👴 ESTABILIDADE PRÉ-APOSENTADORIA EM CCT?",tipo:"select",opcoes:["","Sim","Não","Não sabe"]},
+  {id:"estavelDetalhes",label:"📝 DETALHE A ESTABILIDADE:",tipo:"textarea",rows:2},
+  // MONITORAMENTO
+  {id:"monitorWhatsapp",label:"💬 COBRADO/MONITORADO VIA WHATSAPP FORA DO HORÁRIO?",tipo:"select",opcoes:["","Sim, frequentemente","Sim, ocasionalmente","Não"]},
+  {id:"monitorWhatsappFreq",label:"⏰ COM QUE FREQUÊNCIA?",tipo:"text",ph:"Ex: toda noite, fins de semana, madrugada",dependenteDe:"monitorWhatsapp",dependenteValor:"Sim, frequentemente"},
+  {id:"monitorCamera",label:"📷 MONITORADO POR CÂMERAS?",tipo:"select",opcoes:["","Sim — em área de trabalho","Sim — em vestiário ou banheiro (ILEGAL)","Não"]},
+  {id:"monitorGps",label:"📍 RASTREAMENTO GPS?",tipo:"select",opcoes:["","Sim no veículo","Sim no celular","Ambos","Não"]},
+  {id:"disponivel24h",label:"📞 OBRIGADO A FICAR DISPONÍVEL 24H/7?",tipo:"select",opcoes:["","Sim","Às vezes","Não"]},
+  {id:"softwareMonitor",label:"💻 SOFTWARE DE MONITORAMENTO NO COMPUTADOR?",tipo:"select",opcoes:["","Sim","Não","Não sabe"]},
+  // DESPESAS
+  {id:"usaVeiculoProprio",label:"🚗 USAVA VEÍCULO PRÓPRIO A SERVIÇO?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"kmMes",label:"📏 KM RODADOS POR MÊS A SERVIÇO:",tipo:"text",ph:"Ex: ~1.500 km/mês",dependenteDe:"usaVeiculoProprio",dependenteValor:"Sim"},
+  {id:"reembolsoKm",label:"⛽ RECEBIA REEMBOLSO DE COMBUSTÍVEL / KM?",tipo:"select",opcoes:["","Sim, integral","Sim, parcial","Não recebia"],dependenteDe:"usaVeiculoProprio",dependenteValor:"Sim"},
+  {id:"usaCelularProprio",label:"📱 USAVA CELULAR PRÓPRIO PARA TRABALHO?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"reembolsoCelular",label:"💰 RECEBIA AJUDA DE CUSTO DE TELEFONE?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"usaCelularProprio",dependenteValor:"Sim"},
+  {id:"homeOffice",label:"🏠 TRABALHAVA EM HOME OFFICE?",tipo:"select",opcoes:["","Sim, integral","Sim, parcial","Não"]},
+  {id:"auxilioHomeOffice",label:"💡 RECEBIA AUXÍLIO HOME OFFICE?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"homeOffice",dependenteValor:["Sim, integral","Sim, parcial"]},
+  {id:"ferramentasHO",label:"🖥️ QUAIS FERRAMENTAS FORNECIDAS?",tipo:"text",ph:"Ex: notebook, cadeira, headset, nenhuma",dependenteDe:"homeOffice",dependenteValor:["Sim, integral","Sim, parcial"]},
+  // COAÇÃO, PEJOTIZAÇÃO, DISCRIMINAÇÃO
+  {id:"pejotizacaoForcada",label:"🏢 FOI OBRIGADO A ABRIR MEI/PJ PARA CONTINUAR?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"detalhePejotizacao",label:"📝 DETALHE A PEJOTIZAÇÃO:",tipo:"textarea",rows:2,ph:"Ex: abri MEI mas continuava com horário fixo, exclusividade, subordinação direta...",dependenteDe:"pejotizacaoForcada",dependenteValor:"Sim"},
+  {id:"pressionadoAssinar",label:"✍️ FOI PRESSIONADO A ASSINAR ALGUM DOCUMENTO?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"qualDocPresionado",label:"📋 QUAL DOCUMENTO? CIRCUNSTÂNCIAS:",tipo:"textarea",rows:2,ph:"Ex: assinou recibo de verbas não recebidas, pedido de demissão coagido...",dependenteDe:"pressionadoAssinar",dependenteValor:"Sim"},
+  {id:"discriminacao",label:"⚖️ SOFREU DISCRIMINAÇÃO NO TRABALHO?",tipo:"select",opcoes:["","Sim","Não","Possível — verificar"]},
+  {id:"tipoDiscriminacao",label:"📋 TIPO DE DISCRIMINAÇÃO:",tipo:"select",opcoes:["","Racial / étnica","Gênero / sexismo","Orientação sexual","Religiosa","Por doença / deficiência","Por gravidez","Por atividade sindical","Outro"],dependenteDe:"discriminacao",dependenteValor:"Sim"},
+  {id:"descricaoDiscriminacao",label:"📝 DESCREVA A DISCRIMINAÇÃO:",tipo:"textarea",rows:3,dependenteDe:"discriminacao",dependenteValor:"Sim"},
+  {id:"assedioSexual",label:"🚨 SOFREU ASSÉDIO SEXUAL?",tipo:"select",opcoes:["","Sim","Não","Prefere não responder agora"]},
+  {id:"assedioSexualQuem",label:"👤 QUEM PRATICAVA?",tipo:"text",ph:"Cargo/função (não precisa nomear agora)",dependenteDe:"assedioSexual",dependenteValor:"Sim"},
+  {id:"assedioSexualDescricao",label:"📝 DESCREVA OS EPISÓDIOS:",tipo:"textarea",rows:3,ph:"Ex: propostas, contato físico indesejado, chantagem, mensagens...",dependenteDe:"assedioSexual",dependenteValor:"Sim"},
+  {id:"assedioSexualDenunciou",label:"📢 DENUNCIOU INTERNAMENTE?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"assedioSexual",dependenteValor:"Sim"},
+  {id:"represaliaDepoisDenuncia",label:"⚠️ HOUVE REPRESÁLIA APÓS DENÚNCIA?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"assedioSexualDenunciou",dependenteValor:"Sim"},
+  // DANO EXISTENCIAL
+  {id:"metasAbusivas",label:"🎯 TINHA METAS ABUSIVAS OU INATINGÍVEIS?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"descricaoMetas",label:"📋 DESCREVA AS METAS:",tipo:"textarea",rows:2,ph:"Ex: meta de 150% do setor, punições, ranking público...",dependenteDe:"metasAbusivas",dependenteValor:"Sim"},
+  {id:"impedidoFerias",label:"🏖️ ERA IMPEDIDO DE TIRAR FÉRIAS?",tipo:"select",opcoes:["","Sim — empregador sempre adiava","Sim — pressão para não sair","Não"]},
+  {id:"jornadaAfetouVida",label:"👨‍👩‍👧 JORNADA AFETOU VIDA PESSOAL/FAMILIAR?",tipo:"select",opcoes:["","Sim, gravemente","Sim, moderadamente","Não"]},
+  {id:"descricaoDanoExistencial",label:"📝 DESCREVA O IMPACTO NA VIDA PESSOAL:",tipo:"textarea",rows:3,ph:"Ex: não conseguia jantar em família, sem lazer, sem descanso...",dependenteDe:"jornadaAfetouVida",dependenteValor:["Sim, gravemente","Sim, moderadamente"]},
+  {id:"tratamentoPsicologico",label:"🧠 FAZ/FEZ TRATAMENTO PSICOLÓGICO POR CAUSA DO TRABALHO?",tipo:"select",opcoes:["","Sim, atualmente","Sim, fez anteriormente","Não"]},
+  {id:"burnout",label:"😮 FOI DIAGNOSTICADO COM BURNOUT / ANSIEDADE / DEPRESSÃO?",tipo:"select",opcoes:["","Sim, com laudo médico","Sim, sem laudo formal","Não"]},
+  {id:"laudoBurnout",label:"📄 TEM LAUDO/ATESTADO?",tipo:"select",opcoes:["","Sim","Não"],dependenteDe:"burnout",dependenteValor:["Sim, com laudo médico","Sim, sem laudo formal"]},
+  // PROVAS
+  {id:"temCtps",label:"📒 TEM A CTPS?",tipo:"select",opcoes:["","Sim, disponível","Sim, mas está com a empresa","Não encontrou"]},
+  {id:"temHolerites",label:"🧾 TEM HOLERITES?",tipo:"select",opcoes:["","Sim, todos","Sim, alguns","Não tem nenhum"]},
+  {id:"temContratos",label:"📄 TEM CONTRATO DE TRABALHO?",tipo:"select",opcoes:["","Sim","Não","Não recebeu cópia"]},
+  {id:"temMensagensWhats",label:"💬 TEM MENSAGENS DE WHATSAPP RELEVANTES?",tipo:"select",opcoes:["","Sim, relevantes","Algumas","Não"]},
+  {id:"temFotosVideos",label:"📸 TEM FOTOS OU VÍDEOS DO TRABALHO?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"temLaudosMedicos",label:"🏥 TEM LAUDOS / ATESTADOS MÉDICOS?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"outrasProvas",label:"📎 OUTRAS PROVAS RELEVANTES:",tipo:"textarea",rows:2,ph:"Ex: fotos, prints de ponto, declarações de colegas..."},
+  // SEGURO / BENEFÍCIOS
+  {id:"seguroDesemprego",label:"🟢 JÁ RECEBEU SEGURO-DESEMPREGO?",tipo:"select",opcoes:["","Sim, desta empresa","Sim, de anterior","Nunca recebeu"],dependenteDe:"aindaTrabalhando",dependenteValor:"Não"},
+  {id:"beneficioGov",label:"🏛️ RECEBE BENEFÍCIO DO GOVERNO?",tipo:"select",opcoes:["","Sim","Não"]},
+  {id:"quaisBeneficios",label:"📋 QUAL(IS) BENEFÍCIO(S)?",tipo:"text",ph:"Ex: BPC/LOAS, auxílio doença, Bolsa Família...",dependenteDe:"beneficioGov",dependenteValor:"Sim"}
+];
+
+const secoes=[
+  {titulo:"📌 DADOS DA ENTREVISTA",ids:["dataAtendimento","entrevistador","entrevistado"]},
+  {titulo:"👤 DADOS PESSOAIS",ids:["cpfReclamante","rgReclamante","dataNascimento","estadoCivil","telefonePrincipal","emailReclamante","cepReclamante","enderecoReclamante","numeroEndReclamante","complementoReclamante","bairroReclamante","cidadeReclamante","ufReclamante","possuiHipossuficiencia"]},
+  {titulo:"🏢 EMPRESA & VÍNCULO",ids:["cnpj","nomeEmpresa","cepEmpresa","enderecoEmpresa","localTrabalho","tipoVinculo","primeiroDia","dataRegistro","aindaTrabalhando","ultimoDia","formaDemissao","justaCausaMotivo","motivoPedido","telegrama","outrasEmpresas","eraTerceirizado","empresaTomadora"]},
+  {titulo:"📝 CONTRATO & REGISTRO",ids:["trabalhouAntesCTPS","periodoSemRegistro","contratoExperiencia","prazoContrato","renovouContrato","quantasRenovacoes","mudancaLocalTrabalho","detalhesMudancaLocal"]},
+  {titulo:"🧑‍💼 FUNÇÃO & ATIVIDADES",ids:["funcao","atividades","alteracaoFuncao","qualAlteracao","acumuloFuncao","funcoesAcumuladas","ctpsAnotacoes"]},
+  {titulo:"💰 SALÁRIO",ids:["ultimoSalario","valorPorFora","quantoPorFora","holerite","formaRecebimento","pagamentoEmDia","frequenciaAtrasos","salarioNaoPago","mesesAberto","diferencaSalarial","nomeColega","funcaoColega","salarioColega","tempoColega","gratificacaoFuncao","valorGratificacao","adicionalNoturnoRecebido","reducaoSalarial","detalheReducao"]},
+  {titulo:"🎁 AUXÍLIOS",ids:["valeRefeicaoSim","valeRefeicaoValor","valeTransporteSim","valeTransporteForma","valeTransporteOptouNao","deslocamento","cestaBasicaSim","cestaBasicaTipo","cestaBasicaValor","planoSaude","outrosAuxilios"]},
+  {titulo:"⏰ JORNADA & CONTROLE",ids:["tipoEscala","jornDiaInicio","jornDiaFim","jornEntrada","jornSaida","diasSemana","trabalhaSabado","quantosSabados","horarioSabado","trabalhaDomingo","quantosDomingos","horarioDomingo","trabalhavaFeriados","quantosFeriados","horarioCombinado","horarioReal","trabalhoApos22h","horasApos22h","intervalo","tempoIntervalo","localRefeicao","horasExtrasCorretas","mediaHe","heUnidade","batiaPonto","pontoVoltar","tipoPonto","bancoHoras","bancoHorasAcordo"]},
+  {titulo:"🦺 EPI & SEGURANÇA",ids:["recebiaepi","tiposEPI","epiAdequado","assinavaFichaEPI","treinamentoSeguranca"]},
+  {titulo:"📑 VERBAS & RESCISÃO",ids:["avisoPrevio","diasAvisoPrevio","decimoTerceiro","ferias","feriasVencidas","valorFerias","recebeuAcerto","valorAcerto","dataAcerto","assinouRecibo","multaFGTS","fgtsCorreto"]},
+  {titulo:"⚠️ INSALUBRIDADE & PERICULOSIDADE",ids:["insalubridade","ambienteUmido","tempExtrema","barulhento","lixoBanheiro","pessoasBanheiro","quimicos","detalheQuimicos","periculosidade","energiaEletrica","inflamaveis","detalheInflamaveis"]},
+  {titulo:"🩺 ACIDENTES, PUNIÇÕES & SAÚDE",ids:["punicao","tipoPunicao","assedioMoral","assedioMoralQuem","assedioMoralFrequencia","assedioMoralPublico","assedioDescricao","abaloPsico","testemunhas","testemunha2","testemunha3","ambienteDesc","acidente","detalhesAcidente","quandoAcidente","afastamentoPrevio","cat","doencaOcupacional","qualDoenca"]},
+  {titulo:"🛡️ ESTABILIDADE & PROTEÇÕES",ids:["estavelGestante","dataPartoGestante","estavelAcidente","estavelCipa","estavelDirigenteSindical","estavelPreAposentadoria","estavelDetalhes"]},
+  {titulo:"📱 MONITORAMENTO & PRIVACIDADE",ids:["monitorWhatsapp","monitorWhatsappFreq","monitorCamera","monitorGps","disponivel24h","softwareMonitor"]},
+  {titulo:"🚗 DESPESAS & BENS PESSOAIS",ids:["usaVeiculoProprio","kmMes","reembolsoKm","usaCelularProprio","reembolsoCelular","homeOffice","auxilioHomeOffice","ferramentasHO"]},
+  {titulo:"⚖️ COAÇÃO, PEJOTIZAÇÃO & DISCRIMINAÇÃO",ids:["pejotizacaoForcada","detalhePejotizacao","pressionadoAssinar","qualDocPresionado","discriminacao","tipoDiscriminacao","descricaoDiscriminacao","assedioSexual","assedioSexualQuem","assedioSexualDescricao","assedioSexualDenunciou","represaliaDepoisDenuncia"]},
+  {titulo:"🧠 DANO EXISTENCIAL & SAÚDE MENTAL",ids:["metasAbusivas","descricaoMetas","impedidoFerias","jornadaAfetouVida","descricaoDanoExistencial","tratamentoPsicologico","burnout","laudoBurnout"]},
+  {titulo:"📁 PROVAS & DOCUMENTOS",ids:["temCtps","temHolerites","temContratos","temMensagensWhats","temFotosVideos","temLaudosMedicos","outrasProvas"]},
+  {titulo:"📌 SEGURO & BENEFÍCIOS",ids:["seguroDesemprego","beneficioGov","quaisBeneficios"]}
+];
+
+const campoIdx={};
+campos.forEach((c,i)=>campoIdx[c.id]=i);
+
+// ═══════════════════════════════════════
+// TOOLTIPS
+// ═══════════════════════════════════════
+const TOOLTIPS={
+  dataAtendimento:'Data em que está sendo realizada a entrevista no escritório.',
+  cpfReclamante:'CPF é indispensável para o ajuizamento. Solicite o documento original.',
+  possuiHipossuficiencia:'Garante gratuidade da justiça (Lei 1.060/50 e art. 790 CLT). Marque sempre que o trabalhador não puder pagar custas sem prejuízo do sustento.',
+  cnpj:'CNPJ preenche automaticamente razão social e endereço via BrasilAPI.',
+  tipoVinculo:'Define regras aplicáveis: CLT urbano, rural, doméstico etc.',
+  primeiroDia:'Primeiro dia trabalhado, mesmo antes do registro. Determina início do tempo de serviço.',
+  aindaTrabalhando:'Campos de rescisão são ocultados automaticamente se ainda trabalhando.',
+  formaDemissao:'Define quais verbas rescisórias são devidas.',
+  justaCausaMotivo:'Art. 482 CLT: ato não comprovado converte em dispensa sem justa causa.',
+  motivoPedido:'Pode embasar rescisão indireta se houver descumprimento patronal.',
+  outrasEmpresas:'Grupo econômico responde solidariamente (art. 2º §2º CLT).',
+  eraTerceirizado:'Terceirização pode gerar responsabilidade subsidiária da tomadora (Súm. 331 TST).',
+  trabalhouAntesCTPS:'Período sem registro gera direito ao reconhecimento do vínculo e verbas do período.',
+  contratoExperiencia:'Prazo máx 90 dias (art. 445 CLT). Mais de uma prorrogação = prazo indeterminado.',
+  ultimoSalario:'Salário base — referência para cálculo de todas as verbas.',
+  valorPorFora:'Pagamentos informais integram o salário para todos os fins (arts. 457 e 458 CLT).',
+  pagamentoEmDia:'Atraso recorrente pode configurar rescisão indireta (art. 483, d, CLT).',
+  diferencaSalarial:'Equiparação salarial: mesma função, empregador, localidade, diferença de tempo ≤ 4 anos (art. 461 CLT).',
+  adicionalNoturnoRecebido:'Trabalho após 22h gera adicional de 25% e hora reduzida (art. 73 CLT).',
+  reducaoSalarial:'Redução só válida com negociação coletiva (art. 7º VI CF).',
+  valeRefeicaoSim:'VR/VA pago em dinheiro pode integrar salário (Súm. 241 TST).',
+  cestaBasicaTipo:'Cesta in natura é excluída (art. 458 §2º IV CLT). Em dinheiro integra a remuneração.',
+  tipoEscala:'Determina dias de folga, DSR e horas extras.',
+  intervalo:'Intervalo inferior a 1h em jornada +6h gera pagamento do período suprimido (Súm. 437 TST).',
+  horasExtrasCorretas:'HE devem ser remuneradas com adicional mínimo de 50% (art. 7º XVI CF).',
+  bancoHoras:'Banco de horas sem acordo coletivo = horas extras devidas no mês.',
+  recebiaepi:'Fornecimento de EPI é obrigação do empregador (NR-6 e art. 166 CLT).',
+  epiAdequado:'EPI ineficaz não neutraliza agente insalubre (Súm. 289 TST).',
+  avisoPrevio:'Proporcional ao tempo de serviço (Lei 12.506/2011): 30 dias + 3 por ano, até 90.',
+  ferias:'Férias devem ser concedidas em 12 meses após período aquisitivo. Atraso = dobro (art. 137 CLT).',
+  multaFGTS:'Multa de 40% sobre depósitos devida na dispensa sem justa causa (art. 18 Lei 8.036/90).',
+  insalubridade:'Gera adicional de 10, 20 ou 40% sobre o salário mínimo (art. 192 CLT + NR-15).',
+  periculosidade:'Adicional de 30% sobre o salário base (art. 193 CLT + NR-16).',
+  assedioMoral:'Assédio reiterado gera indenização por dano moral (arts. 223-A e ss CLT; art. 5º X CF).',
+  acidente:'Acidente gera estabilidade de 12 meses após alta (Súm. 378 TST) e indenização.',
+  estavelGestante:'Gestante: estabilidade desde a confirmação até 5 meses após o parto (art. 10 II "b" ADCT; Súm. 244 TST). Demissão é nula mesmo que o empregador desconheça a gravidez.',
+  estavelAcidente:'Empregado acidentado: estabilidade de 12 meses após retorno (art. 118 Lei 8.213/91; Súm. 378 TST).',
+  estavelCipa:'Eleito CIPA: estabilidade desde candidatura até 1 ano após o mandato (art. 10 II "a" ADCT; OJ 339 SDI-1).',
+  estavelDirigenteSindical:'Dirigente sindical: estabilidade provisória durante mandato (art. 543 §3º CLT).',
+  monitorWhatsapp:'Cobrança por WhatsApp fora do horário pode configurar sobreaviso (art. 244 §2º CLT; Súm. 428 TST) ou tempo à disposição (art. 4º CLT).',
+  monitorCamera:'Câmeras em vestiários/banheiros violam a intimidade (art. 5º X CF) — dano moral indenizável.',
+  disponivel24h:'Sobreaviso: 1/3 da hora normal pelo período de disponibilidade (art. 244 §2º CLT; Súm. 428 TST).',
+  pejotizacaoForcada:'Pejotização: abrir PJ para mascarar vínculo CLT. Presentes subordinação, pessoalidade, habitualidade e onerosidade = vínculo de emprego (art. 9º CLT).',
+  assedioSexual:'Crime (art. 216-A CP) e dano moral trabalhista. Praticado por superior hierárquico = empregador responde objetivamente (art. 932 III CC).',
+  discriminacao:'Discriminação gera indenização por dano moral e pode determinar reintegração ou indenização em dobro (Lei 9.029/95).',
+  metasAbusivas:'Metas inatingíveis usadas para pressionar e punir = assédio moral organizacional, gerando indenização por dano moral existencial.',
+  jornadaAfetouVida:'Dano existencial: jornada excessiva que impede convívio familiar e social. Indenizável independente de dano à saúde (TST).',
+  reembolsoKm:'Uso de veículo próprio sem reembolso = dano material. Base: tabela DETRAN ou CCT.',
+  homeOffice:'Teletrabalho: mesmos direitos do presencial. Despesas do empregado = reembolso ou integração salarial (art. 75-D CLT).',
+  temMensagensWhats:'WhatsApp é admitido como prova (art. 369 CPC). Preservar capturas de tela.',
+};
+
+function addTooltip(el,texto){
+  if(!texto)return;
+  const btn=document.createElement('span');
+  btn.className='tt-btn';btn.setAttribute('tabindex','0');
+  btn.innerHTML='?<span class="tt-box">'+texto+'</span>';
+  el.appendChild(btn);
+}
+
+// ═══════════════════════════════════════
+// CONSTRUIR FORMULÁRIO
+// ═══════════════════════════════════════
+const container=document.getElementById('formVertical');
+let todosWrappers=[],todosOsCampos=[];
+
+function criarCampo(campo){
+  const wrap=document.createElement('div');
+  wrap.className='q-wrap';wrap.dataset.id=campo.id;
+  const main=document.createElement('div');main.className='q-main';
+  const content=document.createElement('div');content.className='q-content';
+  const label=document.createElement('div');label.className='q-label';
+  const lTxt=document.createElement('span');lTxt.textContent=campo.label;label.appendChild(lTxt);
+  if(TOOLTIPS[campo.id])addTooltip(label,TOOLTIPS[campo.id]);
+  content.appendChild(label);
+  let inp;
+  if(campo.tipo==='select'){
+    inp=document.createElement('select');
+    (campo.opcoes||[]).forEach(o=>{const opt=document.createElement('option');opt.value=o;opt.textContent=o||'Selecione';inp.appendChild(opt);});
+  } else if(campo.tipo==='textarea'){
+    inp=document.createElement('textarea');inp.rows=campo.rows||2;if(campo.ph)inp.placeholder=campo.ph;
+  } else if(campo.tipo==='date'){
+    inp=document.createElement('input');inp.type='date';
+  } else if(campo.tipo==='time'){
+    inp=document.createElement('input');inp.type='time';inp.style.width='auto';inp.style.minWidth='120px';
+  } else {
+    inp=document.createElement('textarea');inp.rows=1;inp.dataset.singleline='true';inp.className='auto-text-input';if(campo.ph)inp.placeholder=campo.ph;
+  }
+  inp.id=campo.id;
+  if(campo.moeda)inp.dataset.moeda='true';
+  if(campo.mask)inp.dataset.mask=campo.mask;
+  content.appendChild(inp);
+  if(campo.apiCep||campo.apiCnpj){const msg=document.createElement('div');msg.className='api-msg';msg.id='msg_'+campo.id;content.appendChild(msg);}
+  if(campo.id==='dataNascimento'){const cd=document.createElement('div');cd.className='calc-result';cd.id='calc_idade';content.appendChild(cd);}
+  if(campo.id==='ultimoDia'){const cd=document.createElement('div');cd.className='calc-result';cd.id='calc_tempo';content.appendChild(cd);}
+  if(campo.id==='insalubridade'){
+    const bd=document.createElement('div');bd.className='badge-detalhar';bd.id='btnAbrirModal';bd.innerHTML='🔍 Detalhar riscos ocupacionais';bd.style.display='none';content.appendChild(bd);
+    const res=document.createElement('div');res.className='insalub-resumo';res.id='insalubResumo';content.appendChild(res);
+  }
+  if(campo.hint){const h=document.createElement('small');h.className='hint';h.textContent=campo.hint;content.appendChild(h);}
+  const btnObs=document.createElement('div');btnObs.className='btn-obs';btnObs.title='Observação';btnObs.textContent='+';
+  main.appendChild(content);main.appendChild(btnObs);
+  const obsDiv=document.createElement('div');obsDiv.className='obs-area';
+  const obsLbl=document.createElement('label');obsLbl.textContent='📝 Observações:';
+  const obsTA=document.createElement('textarea');obsTA.rows=2;obsTA.placeholder='Observações adicionais...';obsTA.id='obs_'+campo.id;
+  obsDiv.appendChild(obsLbl);obsDiv.appendChild(obsTA);
+  wrap.appendChild(main);wrap.appendChild(obsDiv);
+  let obsOpen=false;
+  btnObs.addEventListener('click',()=>{obsOpen=!obsOpen;obsDiv.style.display=obsOpen?'block':'none';btnObs.textContent=obsOpen?'−':'+';if(obsOpen)setTimeout(()=>autoEx(obsTA),0);});
+  return wrap;
+}
+
+function construirFormulario(){
+  todosOsCampos=[];todosWrappers=[];container.innerHTML='';
+  secoes.forEach(secao=>{
+    const tit=document.createElement('div');tit.className='section-title';tit.dataset.secId=secao.titulo;tit.textContent=secao.titulo;container.appendChild(tit);
+    secao.ids.forEach(id=>{
+      const idx=campoIdx[id];if(idx===undefined)return;
+      const campo=campos[idx];const wrap=criarCampo(campo);
+      container.appendChild(wrap);todosWrappers.push({wrap,campo});
+    });
+  });
+  todosOsCampos=todosWrappers.map(({campo})=>campo);
+  configurarDependencias();configurarMascaras();configurarAPIs();configurarAutoHoje();
+  construirSectionTabs();
+  setTimeout(()=>ajustarTAs(document),0);
+}
+
+// ═══════════════════════════════════════
+// SECTION TABS
+// ═══════════════════════════════════════
+function construirSectionTabs(){
+  const wrap=document.getElementById('sectionTabs');wrap.innerHTML='';
+  secoes.forEach((sec,i)=>{
+    const tab=document.createElement('div');tab.className='stab';tab.dataset.secIdx=i;
+    const ring=document.createElement('span');ring.className='stab-ring';ring.textContent='○';
+    const lbl=document.createElement('span');lbl.textContent=sec.titulo;
+    tab.appendChild(ring);tab.appendChild(lbl);
+    tab.addEventListener('click',()=>{
+      const tit=document.querySelector('.section-title[data-sec-id="'+sec.titulo+'"]');
+      if(tit)tit.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+    wrap.appendChild(tab);
+  });
+}
+function atualizarSectionTabs(){
+  secoes.forEach((sec,i)=>{
+    const tab=document.querySelector('.stab[data-sec-idx="'+i+'"]');if(!tab)return;
+    const ring=tab.querySelector('.stab-ring');
+    const ids=sec.ids;
+    let total=0,respondidos=0;
+    ids.forEach(id=>{
+      const w=document.querySelector('.q-wrap[data-id="'+id+'"]');
+      if(!w||w.dataset.state==='hidden')return;
+      total++;
+      if(w.dataset.state==='answered'){respondidos++;}
+      else{const el=document.getElementById(id);if(el&&el.value&&el.value!=='Selecione'&&el.value!==el.placeholder)respondidos++;}
+    });
+    const pct=total>0?Math.round((respondidos/total)*100):0;
+    tab.classList.toggle('done',pct===100&&total>0);
+    tab.classList.toggle('partial',pct>0&&pct<100);
+    if(ring){ring.textContent=pct===100&&total>0?'✓':(total>0?pct+'%':'○');}
+  });
+}
+
+// ═══════════════════════════════════════
+// DEPENDÊNCIAS
+// ═══════════════════════════════════════
+function configurarDependencias(){
+  const DIAS=['Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado','Domingo'];
+  function deveMostrar(campo){
+    if(campo.dependeDeEscalaOutra){const e=valor('tipoEscala');if(e==='8h/dia · 44h/semana (CLT padrão)')return false;}
+    if(campo.dependeSemana==='sabado'){const e=valor('tipoEscala');const f=valor('jornDiaFim');if(e==='8h/dia · 44h/semana (CLT padrão)'&&f&&DIAS.indexOf(f)<=4)return false;}
+    if(campo.dependeSemana==='domingo'){const e=valor('tipoEscala');const f=valor('jornDiaFim');if(e==='8h/dia · 44h/semana (CLT padrão)'&&f&&DIAS.indexOf(f)<=5)return false;}
+    if(campo.dependeDeAtraso){const v=valor('pagamentoEmDia');return v==='Às vezes atrasava'||v==='Frequentes atrasos';}
+    if(campo.dependeDeHorasExtras){const v=valor('horasExtrasCorretas');return v==='Não'||v==='Parcialmente';}
+    if(!campo.dependenteDe)return true;
+    const _v=valor(campo.dependenteDe);
+    if(Array.isArray(campo.dependenteValor))return campo.dependenteValor.includes(_v);
+    return _v===campo.dependenteValor;
+  }
+  function limpar(wrap){wrap.querySelectorAll('input,select,textarea').forEach(el=>{if(el.id&&el.id.startsWith('obs_'))return;if(el.tagName==='SELECT')el.selectedIndex=0;else el.value='';if(el.tagName==='TEXTAREA'){el.dataset.mh='';autoEx(el);}el.classList.remove('api-ok','api-err');});wrap.querySelectorAll('.api-msg').forEach(el=>{el.className='api-msg';el.textContent='';});}
+  function atualizar(){
+    todosWrappers.forEach(({wrap,campo})=>{
+      const show=deveMostrar(campo);
+      if(show){wrap.style.display='';setTimeout(()=>ajustarTAs(wrap),0);}
+      else{wrap.style.display='none';limpar(wrap);}
+    });
+    setTimeout(()=>{ajustarTAs(document.getElementById('formVertical'));atualizarSectionTabs();atualizarPainel();},50);
+  }
+  todosWrappers.forEach(({campo})=>{const el=document.getElementById(campo.id);if(el)el.addEventListener('change',atualizar);});
+  atualizar();
+}
+
+// ═══════════════════════════════════════
+// MÁSCARAS
+// ═══════════════════════════════════════
+function aplicarCPF(v){return v.replace(/\D/g,'').slice(0,11).replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');}
+function aplicarCNPJ(v){return v.replace(/\D/g,'').slice(0,14).replace(/^(\d{2})(\d)/,'$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3').replace(/\.(\d{3})(\d)/,'.$1/$2').replace(/(\d{4})(\d)/,'$1-$2');}
+function aplicarTel(v){const d=v.replace(/\D/g,'').slice(0,11);if(d.length<=10)return d.replace(/^(\d{2})(\d)/,'($1) $2').replace(/(\d{4})(\d)/,'$1-$2');return d.replace(/^(\d{2})(\d)/,'($1) $2').replace(/(\d{5})(\d)/,'$1-$2');}
+function aplicarCEP(v){return v.replace(/\D/g,'').slice(0,8).replace(/(\d{5})(\d)/,'$1-$2');}
+function aplicarMoeda(v){const n=v.replace(/\D/g,'');if(!n)return '';const num=(parseInt(n,10)/100).toFixed(2);return num.replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+function configurarMascaras(){
+  document.querySelectorAll('[data-mask]').forEach(el=>{const mask=el.dataset.mask;el.addEventListener('input',e=>{const v=e.target.value;if(mask==='cpf')e.target.value=aplicarCPF(v);else if(mask==='cnpj')e.target.value=aplicarCNPJ(v);else if(mask==='telefone')e.target.value=aplicarTel(v);else if(mask==='cep')e.target.value=aplicarCEP(v);});});
+  document.querySelectorAll('[data-moeda]').forEach(el=>{el.addEventListener('input',e=>e.target.value=aplicarMoeda(e.target.value));});
+  document.addEventListener('input',e=>{if(e.target&&e.target.tagName==='TEXTAREA')autoEx(e.target);});
+  document.addEventListener('keydown',e=>{if(e.target&&e.target.matches('textarea[data-singleline="true"]')&&e.key==='Enter'&&!e.shiftKey)e.preventDefault();});
+  window.addEventListener('resize',()=>setTimeout(()=>ajustarTAs(document),0));
+  window.addEventListener('beforeprint',()=>{ajustarTAs(document);gerarResumo();gerarPrintView();});
+}
+
+// ═══════════════════════════════════════
+// APIs — CEP e CNPJ
+// ═══════════════════════════════════════
+function setMsg(id,type,text){const el=document.getElementById(id);if(!el)return;el.className='api-msg '+type;el.textContent=text;}
+async function buscarCEP(cep,destino){
+  const clean=cep.replace(/\D/g,'');if(clean.length!==8)return;
+  const msgId='msg_'+(destino==='reclamante'?'cepReclamante':'cepEmpresa');
+  setMsg(msgId,'loading','🔄 Consultando ViaCEP...');
+  try{
+    const r=await fetch('https://viacep.com.br/ws/'+clean+'/json/');const d=await r.json();
+    if(d.erro){setMsg(msgId,'err','❌ CEP não encontrado.');return;}
+    if(destino==='reclamante'){setVal('enderecoReclamante',d.logradouro||'');setVal('bairroReclamante',d.bairro||'');setVal('cidadeReclamante',d.localidade||'');setVal('ufReclamante',d.uf||'');['enderecoReclamante','bairroReclamante','cidadeReclamante','ufReclamante'].forEach(id=>{const el=document.getElementById(id);if(el){el.classList.add('api-ok');setTimeout(()=>el.classList.remove('api-ok'),3000);}});}
+    else{const end=[d.logradouro,d.bairro,d.localidade+(d.uf?'/'+d.uf:'')].filter(Boolean).join(', ');setVal('enderecoEmpresa',end);const el=document.getElementById('enderecoEmpresa');if(el){el.classList.add('api-ok');setTimeout(()=>el.classList.remove('api-ok'),3000);}}
+    setMsg(msgId,'ok','✅ Endereço preenchido (ViaCEP).');toast('✅ CEP encontrado!','ok',2000);
+  }catch(e){setMsg(msgId,'err','❌ Erro ao consultar CEP.');}
+}
+async function buscarCNPJ(cnpj){
+  const clean=cnpj.replace(/\D/g,'');if(clean.length!==14)return;
+  setMsg('msg_cnpj','loading','🔄 Consultando Receita Federal...');
+  try{
+    const r=await fetch('https://brasilapi.com.br/api/cnpj/v1/'+clean);if(!r.ok)throw new Error();
+    const d=await r.json();setVal('nomeEmpresa',d.razao_social||'');
+    const cepRaw=(d.cep||'').replace(/\D/g,'');if(cepRaw)setVal('cepEmpresa',aplicarCEP(cepRaw));
+    const end=[d.logradouro,d.numero,d.complemento,d.bairro,d.municipio+(d.uf?'/'+d.uf:'')].filter(Boolean).join(', ');
+    setVal('enderecoEmpresa',end);['nomeEmpresa','enderecoEmpresa','cepEmpresa'].forEach(id=>{const el=document.getElementById(id);if(el){el.classList.add('api-ok');setTimeout(()=>el.classList.remove('api-ok'),3000);}});
+    setMsg('msg_cnpj','ok','✅ '+d.razao_social);toast('✅ CNPJ encontrado: '+d.razao_social,'ok',3000);
+  }catch(e){setMsg('msg_cnpj','err','❌ CNPJ não encontrado.');}
+}
+function configurarAPIs(){
+  const cepRec=document.getElementById('cepReclamante');if(cepRec)cepRec.addEventListener('input',e=>{if(e.target.value.replace(/\D/g,'').length===8)buscarCEP(e.target.value,'reclamante');});
+  const cepEmp=document.getElementById('cepEmpresa');if(cepEmp)cepEmp.addEventListener('input',e=>{if(e.target.value.replace(/\D/g,'').length===8)buscarCEP(e.target.value,'empresa');});
+  const cnpj=document.getElementById('cnpj');if(cnpj)cnpj.addEventListener('input',e=>{if(e.target.value.replace(/\D/g,'').length===14)buscarCNPJ(e.target.value);});
+}
+function configurarAutoHoje(){const el=document.getElementById('dataAtendimento');if(el&&!el.value){const h=new Date();el.value=h.getFullYear()+'-'+String(h.getMonth()+1).padStart(2,'0')+'-'+String(h.getDate()).padStart(2,'0');}}
+
+// ═══════════════════════════════════════
+// CÁLCULOS AUTOMÁTICOS
+// ═══════════════════════════════════════
+function calcularIdade(){const s=valor('dataNascimento');const el=document.getElementById('calc_idade');if(!el)return;if(!s){el.classList.remove('ativo');return;}const nasc=new Date(s+'T00:00:00');const h=new Date();let anos=h.getFullYear()-nasc.getFullYear();const m=h.getMonth()-nasc.getMonth();if(m<0||(m===0&&h.getDate()<nasc.getDate()))anos--;if(anos<0||anos>120){el.classList.remove('ativo');return;}el.textContent='🎂 Idade: '+anos+' anos';el.classList.add('ativo');}
+function calcularTempoContrato(){const el=document.getElementById('calc_tempo');if(!el)return;const d1s=valor('primeiroDia'),d2s=valor('ultimoDia'),ainda=valor('aindaTrabalhando')==='Sim';const d1=d1s?new Date(d1s+'T00:00:00'):null;const d2=d2s?new Date(d2s+'T00:00:00'):(ainda?new Date():null);if(!d1||!d2||d2<=d1){el.classList.remove('ativo');return;}const dias=Math.floor((d2-d1)/(1000*60*60*24));const anos=Math.floor(dias/365);const mR=Math.floor((dias%365)/30);const dR=dias%30;let txt='⏱️ Tempo de contrato: ';if(anos>0)txt+=anos+' ano'+(anos>1?'s':'')+', ';if(mR>0)txt+=mR+' mês'+(mR>1?'es':'')+', ';txt+=dR+' dia'+(dR!==1?'s':'');if(ainda)txt+=' (vínculo ativo)';el.textContent=txt;el.classList.add('ativo');atualizarTimeline();}
+function diasParaPrescrição(){const s=valor('ultimoDia');if(!s)return null;const d=new Date(s+'T00:00:00');const presc=new Date(d);presc.setFullYear(presc.getFullYear()+2);return Math.ceil((presc-new Date())/(1000*60*60*24));}
+function hookCalcs(){['dataNascimento'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('change',calcularIdade);});['primeiroDia','ultimoDia','aindaTrabalhando'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('change',calcularTempoContrato);});calcularIdade();calcularTempoContrato();}
+
+// ═══════════════════════════════════════
+// SCORE ENGINE
+// ═══════════════════════════════════════
+function calcularScore(){
+  const v=valor;const violacoes=[];let ve=0,score=0;
+  const salario=parseMoeda(v('ultimoSalario'))||0;
+  const porFora=v('valorPorFora')==='Sim'?(parseMoeda(v('quantoPorFora'))||0):0;
+  const salReal=salario+porFora;
+  let meses=0;
+  const d1=v('primeiroDia')?new Date(v('primeiroDia')+'T00:00:00'):null;
+  const d2=v('ultimoDia')?new Date(v('ultimoDia')+'T00:00:00'):(v('aindaTrabalhando')==='Sim'?new Date():null);
+  if(d1&&d2&&d2>d1)meses=Math.max(1,Math.round((d2-d1)/(1000*60*60*24*30)));
+  const heRaw=parseFloat(v('mediaHe'))||0;
+  const heH=v('heUnidade')==='minutos'?heRaw/60:heRaw;
+  const heNaoPagas=v('horasExtrasCorretas')==='Não'||v('horasExtrasCorretas')==='Parcialmente';
+  if(heNaoPagas&&heH>0&&salReal>0){const val=Math.round((salReal/220)*heH*22*meses*0.7);violacoes.push({desc:'Horas extras não pagas',val,norma:'Art. 7º XVI CF; Art. 59 CLT',cor:'er'});ve+=val;score+=20;}
+  if(v('intervalo')==='Sim, menos de 1 hora'||v('intervalo')==='Não tinha intervalo'){const val=salReal>0?Math.round((salReal/220)*22*meses):0;violacoes.push({desc:'Intervalo suprimido/reduzido',val,norma:'Art. 71 CLT; Súm. 437 TST',cor:'wa'});ve+=val;score+=10;}
+  if(v('adicionalNoturnoRecebido')==='Não'&&v('trabalhoApos22h')==='Sim'&&salReal>0){const val=Math.round(salReal*0.25*meses*0.5);violacoes.push({desc:'Adicional noturno não pago',val,norma:'Art. 73 CLT',cor:'wa'});ve+=val;score+=10;}
+  if(v('insalubridade')==='Sim'){const grau=v('lixoBanheiro')==='Sim'?0.40:0.20;const val=Math.round(1518*grau*meses);violacoes.push({desc:'Adicional de insalubridade (grau '+(grau===0.40?'máximo':'médio')+')',val,norma:'Art. 192 CLT; NR-15',cor:'er'});ve+=val;score+=15;}
+  if(v('periculosidade')==='Sim'&&salReal>0){const val=Math.round(salReal*0.30*meses);violacoes.push({desc:'Adicional de periculosidade (30%)',val,norma:'Art. 193 CLT; NR-16',cor:'er'});ve+=val;score+=15;}
+  if(v('salarioNaoPago')==='Sim'&&salReal>0){violacoes.push({desc:'Salários em aberto',val:salReal,norma:'Art. 459 CLT',cor:'er'});ve+=salReal;score+=15;}
+  if(v('fgtsCorreto')==='Não, faltam depósitos'&&salReal>0){const val=Math.round(salReal*0.08*meses);violacoes.push({desc:'FGTS não depositado',val,norma:'Lei 8.036/90',cor:'wa'});ve+=val;score+=10;}
+  if(v('assedioMoral')==='Sim'&&salReal>0){const val=Math.max(Math.round(salReal*12),5000);violacoes.push({desc:'Assédio moral — dano moral',val,norma:'Arts. 223-A CLT; Art. 5º X CF',cor:'er'});ve+=val;score+=15;}
+  if(v('assedioSexual')==='Sim'&&salReal>0){const val=Math.max(Math.round(salReal*18),10000);violacoes.push({desc:'Assédio sexual — dano moral',val,norma:'Art. 216-A CP; Art. 932 III CC',cor:'er'});ve+=val;score+=20;}
+  if(v('acidente')==='Sim'){const val=Math.max(Math.round(salReal*24),10000);violacoes.push({desc:'Acidente de trabalho — indenização',val,norma:'Art. 7º XXVIII CF; Arts. 186 e 927 CC',cor:'er'});ve+=val;score+=10;}
+  if(v('discriminacao')==='Sim'){const val=Math.max(Math.round(salReal*12),5000);violacoes.push({desc:'Discriminação — dano moral',val,norma:'Lei 9.029/95; Lei 7.716/89',cor:'er'});ve+=val;score+=10;}
+  if(v('pejotizacaoForcada')==='Sim'){violacoes.push({desc:'Pejotização forçada — vínculo CLT',val:0,norma:'Art. 9º CLT',cor:'wa'});score+=15;}
+  if(v('estavelGestante')==='Sim'&&v('aindaTrabalhando')==='Não'){const val=salReal>0?Math.round(salReal*5):5000;violacoes.push({desc:'Gestante demitida — estabilidade violada',val,norma:'Art. 10 II ADCT; Súm. 244 TST',cor:'er'});ve+=val;score+=20;}
+  if(v('disponivel24h')==='Sim'&&salReal>0){const val=Math.round(salReal*(1/3)*meses*0.3);violacoes.push({desc:'Sobreaviso/disponibilidade 24h',val,norma:'Art. 244 §2º CLT; Súm. 428 TST',cor:'wa'});ve+=val;score+=8;}
+  if(v('jornadaAfetouVida')==='Sim, gravemente'&&salReal>0){const val=Math.max(Math.round(salReal*6),3000);violacoes.push({desc:'Dano existencial',val,norma:'Dano existencial — TST',cor:'wa'});ve+=val;score+=10;}
+  if(v('trabalhouAntesCTPS')==='Sim'){violacoes.push({desc:'Período sem registro CTPS',val:0,norma:'Arts. 29 e 41 CLT',cor:'wa'});score+=5;}
+  if(v('alteracaoFuncao')==='Sim'||v('acumuloFuncao')==='Sim'){const val=salReal>0?Math.round(salReal*0.10*meses):0;violacoes.push({desc:'Desvio ou acúmulo de função',val,norma:'Art. 468 CLT',cor:'wa'});ve+=val;score+=5;}
+  if(v('avisoPrevio')==='Dispensado sem pagamento'&&salReal>0){violacoes.push({desc:'Aviso prévio não indenizado',val:salReal,norma:'Art. 487 CLT',cor:'wa'});ve+=salReal;score+=5;}
+  if(v('multaFGTS')==='Não'&&salReal>0){const val=Math.round(salReal*0.08*meses*0.40);violacoes.push({desc:'Multa rescisória FGTS 40%',val,norma:'Art. 18 §1º Lei 8.036/90',cor:'wa'});ve+=val;score+=5;}
+  if(v('burnout')&&v('burnout').includes('Sim')&&salReal>0){const val=Math.max(Math.round(salReal*6),3000);violacoes.push({desc:'Burnout/doença ocupacional',val,norma:'Art. 20 Lei 8.213/91',cor:'wa'});ve+=val;score+=8;}
+  score=Math.min(100,score);
+  return{violacoes,ve,score};
+}
+
+// ═══════════════════════════════════════
+// PAINEL AO VIVO — GAUGE, VIOLAÇÕES, ALERTAS
+// ═══════════════════════════════════════
+function atualizarGauge(score,ve){
+  const arc=document.getElementById('gaugeArc');
+  const txt=document.getElementById('gaugeScoreTxt');
+  const viab=document.getElementById('gaugeViabTxt');
+  const valorEl=document.getElementById('gaugeValor');
+  const lbl=document.getElementById('gaugeViabLabel');
+  if(!arc)return;
+  const total=251;const pct=score/100;
+  arc.style.strokeDasharray=(total*pct)+' '+(total*(1-pct));
+  if(txt)txt.textContent=score;
+  let viabStr='SEM DADOS',cor='var(--tx3)';
+  if(score>0&&score<40){viabStr='BAIXA';cor='#dc2626';}
+  else if(score>=40&&score<70){viabStr='MÉDIA';cor='#d97706';}
+  else if(score>=70){viabStr='ALTA';cor='#16a34a';}
+  if(viab){viab.textContent=viabStr;viab.setAttribute('fill',cor);}
+  if(txt&&score>0)txt.setAttribute('fill',cor);
+  if(valorEl)valorEl.textContent=fmtMoeda(ve);
+  if(lbl)lbl.textContent=score>0?viabStr+' VIABILIDADE':'Preencha o formulário';
+  const headerLbl=document.getElementById('headerProgLabel');
+  if(headerLbl&&valor('entrevistado'))headerLbl.textContent='👤 '+valor('entrevistado');
+}
+
+function atualizarViolacoes(violacoes){
+  const list=document.getElementById('violacoesList');const cnt=document.getElementById('violCount');if(!list)return;
+  if(violacoes.length===0){list.innerHTML='<div style="font-size:.72rem;color:var(--tx3);text-align:center;padding:10px 0;">Nenhuma violação detectada ainda</div>';if(cnt)cnt.textContent='0';return;}
+  if(cnt)cnt.textContent=violacoes.length;
+  list.innerHTML='';
+  violacoes.forEach(vv=>{
+    const card=document.createElement('div');card.className='viol-card '+(vv.cor||'wa');
+    card.innerHTML='<div class="viol-title">'+vv.desc+'</div><div class="viol-norma">'+vv.norma+'</div>'+(vv.val>0?'<div class="viol-val">≈ '+fmtMoeda(vv.val)+'</div>':'');
+    list.appendChild(card);
+  });
+}
+
+function atualizarAlertas(){
+  const list=document.getElementById('alertasList');if(!list)return;
+  const v=valor;
+  const dias=diasParaPrescrição();
+  const alertas=[];
+  if(dias!==null&&dias<90&&dias>0)alertas.push({msg:'🔴 URGENTE: Prescrição em '+dias+' dias!',cor:'er'});
+  if(dias!==null&&dias<=0&&v('ultimoDia'))alertas.push({msg:'⛔ PRESCRIÇÃO VENCIDA — verificar prazo quinquenal',cor:'er'});
+  if(v('formaDemissao')==='Justa causa'&&!v('justaCausaMotivo'))alertas.push({msg:'⚠️ Justa causa sem descrição do ato faltoso',cor:'wa'});
+  if(v('renovouContrato')==='Sim'&&parseInt(v('quantasRenovacoes'))>1)alertas.push({msg:'💡 +1 renovação: possível contrato por prazo indeterminado',cor:'ok'});
+  if(v('trabalhoApos22h')==='Sim'&&v('adicionalNoturnoRecebido')==='Não')alertas.push({msg:'🌙 Adicional noturno não pago detectado',cor:'wa'});
+  if(v('acidente')==='Sim'&&v('aindaTrabalhando')==='Não')alertas.push({msg:'🏥 Acidente + demissão: verificar estabilidade 12 meses (Súm. 378)',cor:'er'});
+  if(v('estavelGestante')==='Sim'&&v('aindaTrabalhando')==='Não')alertas.push({msg:'👶 GESTANTE DEMITIDA: estabilidade até 5 meses após parto (ADCT)',cor:'er'});
+  if(v('pejotizacaoForcada')==='Sim')alertas.push({msg:'🏢 Pejotização forçada: verificar vínculo CLT disfarçado',cor:'wa'});
+  if(v('assedioSexual')==='Sim')alertas.push({msg:'🚨 Assédio sexual: prioridade máxima na documentação',cor:'er'});
+  if(v('monitorCamera')&&v('monitorCamera').includes('vestiário'))alertas.push({msg:'⛔ Câmera em vestiário/banheiro é ILEGAL',cor:'er'});
+  if(v('trabalhouAntesCTPS')==='Sim')alertas.push({msg:'📋 Período sem CTPS: requerer reconhecimento do vínculo',cor:'wa'});
+  if(v('diferencaSalarial')==='Sim')alertas.push({msg:'⚖️ Equiparação salarial: verificar art. 461 CLT',cor:'ok'});
+  if(v('fgtsCorreto')==='Não, faltam depósitos')alertas.push({msg:'🏦 FGTS: cobrar depósitos em atraso + multa de mora',cor:'wa'});
+  if(v('disponivel24h')==='Sim')alertas.push({msg:'📞 Sobreaviso/prontidão: pode gerar HE ou adicional',cor:'ok'});
+  if(v('burnout')&&v('burnout').includes('Sim'))alertas.push({msg:'🧠 Burnout: verificar nexo causal com o trabalho',cor:'wa'});
+  if(v('estavelCipa')&&v('estavelCipa').includes('Sim')&&v('aindaTrabalhando')==='Não')alertas.push({msg:'🔧 CIPA: verificar estabilidade provisória',cor:'er'});
+  if(v('discriminacao')==='Sim')alertas.push({msg:'⚖️ Discriminação: possível reintegração ou dobro Lei 9.029/95',cor:'wa'});
+  if(v('jornadaAfetouVida')==='Sim, gravemente')alertas.push({msg:'🧠 Dano existencial: jornada afetou vida pessoal/familiar',cor:'wa'});
+  if(alertas.length===0){list.innerHTML='<div style="font-size:.72rem;color:var(--tx3);text-align:center;padding:10px 0;">Sem alertas no momento</div>';return;}
+  list.innerHTML='';
+  alertas.forEach(a=>{const el=document.createElement('div');el.className='alert-item '+a.cor;el.textContent=a.msg;list.appendChild(el);});
+}
+
+function atualizarTimeline(){
+  const d1s=valor('primeiroDia'),d2s=valor('ultimoDia');
+  const ainda=valor('aindaTrabalhando')==='Sim';
+  const card=document.getElementById('timelineCard');
+  if(!d1s){if(card)card.style.display='none';return;}
+  if(card)card.style.display='';
+  const svg=document.getElementById('timelineSvg');if(!svg)return;
+  const d1=new Date(d1s+'T00:00:00');
+  const d2=d2s?new Date(d2s+'T00:00:00'):(ainda?new Date():null);
+  const presc=d2?new Date(d2):null;if(presc)presc.setFullYear(presc.getFullYear()+2);
+  const hoje=new Date();
+  const pontos=[{d:d1,lbl:'Admissão',cor:'#0f2d4a'},{d:d2,lbl:ainda?'Hoje':'Demissão',cor:ainda?'#1a6b3c':'#b91c1c'}];
+  if(presc)pontos.push({d:presc,lbl:'Prescrição',cor:diasParaPrescrição()<90?'#b91c1c':'#d97706'});
+  const w=260,h=70,pad=20;
+  const dMin=pontos[0].d,dMax=pontos[pontos.length-1].d;
+  const range=dMax-dMin||1;
+  function xOf(d){return pad+(d-dMin)/range*(w-2*pad);}
+  let svgContent='';
+  svgContent+='<line x1="'+pad+'" y1="35" x2="'+(w-pad)+'" y2="35" stroke="var(--bd)" stroke-width="2" stroke-linecap="round"/>';
+  pontos.forEach((p,i)=>{
+    if(!p.d)return;
+    const x=xOf(p.d);
+    svgContent+='<circle cx="'+x+'" cy="35" r="6" fill="'+p.cor+'" stroke="#fff" stroke-width="2"/>';
+    const anchor=i===0?'start':(i===pontos.length-1?'end':'middle');
+    const y=i%2===0?22:52;
+    svgContent+='<text x="'+x+'" y="'+y+'" text-anchor="'+anchor+'" font-size="8" font-family="Inter,sans-serif" fill="var(--tx2)">'+p.lbl+'</text>';
+  });
+  svg.innerHTML=svgContent;svg.setAttribute('viewBox','0 0 '+w+' '+h);
+}
+
+function atualizarPainel(){
+  const{violacoes,ve,score}=calcularScore();
+  atualizarGauge(score,ve);
+  atualizarViolacoes(violacoes);
+  atualizarAlertas();
+  atualizarTimeline();
+}
+
+// ═══════════════════════════════════════
+// RESUMO
+// ═══════════════════════════════════════
+function gerarResumo(){
+  const v=valor,lin=[];
+  const push=(r,d)=>{if(d&&d!=='Selecione')lin.push(r+': '+d);};
+  lin.push('═══ ENTREVISTA TRABALHISTA — SIAJFMB v5.0 ═══');
+  push('Data',v('dataAtendimento')?fmtDate(v('dataAtendimento')):'');push('Entrevistador(a)',v('entrevistador'));push('Entrevistado(a)',v('entrevistado'));
+  lin.push('\n— DADOS PESSOAIS —');
+  push('CPF',v('cpfReclamante'));push('RG',v('rgReclamante'));push('Nascimento',v('dataNascimento')?fmtDate(v('dataNascimento')):'');push('Estado civil',v('estadoCivil'));push('Telefone',v('telefonePrincipal'));push('E-mail',v('emailReclamante'));
+  const end=[v('enderecoReclamante'),v('numeroEndReclamante'),v('complementoReclamante'),v('bairroReclamante'),v('cidadeReclamante')+'/'+v('ufReclamante')].filter(Boolean).join(', ');if(end.replace(/\//g,'').trim())lin.push('Endereço: '+end);
+  push('Hipossuficiência',v('possuiHipossuficiencia'));
+  lin.push('\n— EMPRESA & VÍNCULO —');
+  push('Empresa',v('nomeEmpresa'));push('CNPJ',v('cnpj'));push('Endereço empresa',v('enderecoEmpresa'));push('Local trabalho',v('localTrabalho'));push('Tipo vínculo',v('tipoVinculo'));
+  push('Primeiro dia',v('primeiroDia')?fmtDate(v('primeiroDia')):'');push('Registro CTPS',v('dataRegistro')?fmtDate(v('dataRegistro')):'');push('Ainda trabalhando',v('aindaTrabalhando'));
+  if(v('aindaTrabalhando')!=='Sim')push('Último dia',v('ultimoDia')?fmtDate(v('ultimoDia')):'');
+  push('Forma demissão',v('formaDemissao'));if(v('formaDemissao')==='Justa causa')push('Ato faltoso',v('justaCausaMotivo'));if(v('formaDemissao')==='Pedido de demissão')push('Motivo pedido',v('motivoPedido'));
+  if(v('outrasEmpresas'))push('Outras empresas',v('outrasEmpresas'));if(v('eraTerceirizado')==='Sim')push('Empresa tomadora',v('empresaTomadora'));
+  lin.push('\n— CONTRATO —');
+  push('Trabalhou antes CTPS',v('trabalhouAntesCTPS'));if(v('trabalhouAntesCTPS')==='Sim')push('Período sem registro',v('periodoSemRegistro'));push('Contrato experiência',v('contratoExperiencia'));
+  lin.push('\n— FUNÇÃO —');
+  push('Função registrada',v('funcao'));push('Atividades',v('atividades'));push('Alteração função',v('alteracaoFuncao'));push('Acúmulo função',v('acumuloFuncao'));if(v('acumuloFuncao')==='Sim')push('Funções acumuladas',v('funcoesAcumuladas'));
+  lin.push('\n— SALÁRIO —');
+  push('Último salário','R$ '+v('ultimoSalario'));push('Valor por fora',v('valorPorFora'));if(v('valorPorFora')==='Sim')push('Quanto por fora',v('quantoPorFora'));push('Pagamento em dia',v('pagamentoEmDia'));push('Salário não pago',v('salarioNaoPago'));if(v('salarioNaoPago')==='Sim')push('Meses em aberto',v('mesesAberto'));
+  lin.push('\n— JORNADA —');
+  push('Escala',v('tipoEscala'));if(v('tipoEscala')==='8h/dia · 44h/semana (CLT padrão)'){if(v('jornDiaInicio')&&v('jornDiaFim'))push('Dias',v('jornDiaInicio')+' a '+v('jornDiaFim'));if(v('jornEntrada')&&v('jornSaida'))push('Horário',v('jornEntrada')+' às '+v('jornSaida'));}else{push('Dias semana',v('diasSemana'));}
+  if(v('trabalhaSabado')==='Sim')lin.push('Sábados: '+v('quantosSabados')+'/mês · '+v('horarioSabado'));
+  if(v('trabalhaDomingo')==='Sim')lin.push('Domingos: '+v('quantosDomingos')+'/mês · '+v('horarioDomingo'));
+  push('Feriados',v('trabalhavaFeriados'));push('Horário real',v('horarioReal'));push('Após 22h',v('trabalhoApos22h'));push('Intervalo',v('intervalo'));push('HE pagas',v('horasExtrasCorretas'));
+  if(v('mediaHe')){const unid=v('heUnidade')||'horas';const heH=unid==='minutos'?(parseFloat(v('mediaHe'))||0)/60:(parseFloat(v('mediaHe'))||0);push('Média HE/dia',v('mediaHe')+' '+unid+' (= '+heH.toFixed(2)+'h/dia)');}
+  lin.push('\n— EPI & SEGURANÇA —');push('Recebia EPI',v('recebiaepi'));push('EPI adequado',v('epiAdequado'));
+  lin.push('\n— VERBAS RESCISÓRIAS —');
+  if(v('aindaTrabalhando')==='Sim'){lin.push('(Vínculo ativo — verbas rescisórias não aplicáveis)');}
+  else{push('Aviso prévio',v('avisoPrevio'));push('13º salário',v('decimoTerceiro'));push('Férias',v('ferias'));push('Férias vencidas',v('feriasVencidas'));push('Recebeu acerto',v('recebeuAcerto'));if(v('recebeuAcerto')==='Sim')push('Valor acerto','R$ '+v('valorAcerto'));push('Multa FGTS 40%',v('multaFGTS'));push('FGTS depositado',v('fgtsCorreto'));}
+  lin.push('\n— INSALUBRIDADE & PERICULOSIDADE —');push('Insalubridade',v('insalubridade'));push('Periculosidade',v('periculosidade'));
+  lin.push('\n— ESTABILIDADES —');push('Gestante',v('estavelGestante'));push('Estab. acidente',v('estavelAcidente'));push('CIPA',v('estavelCipa'));push('Dirigente sindical',v('estavelDirigenteSindical'));
+  lin.push('\n— SAÚDE & ACIDENTES —');
+  if(v('assedioMoral')==='Sim')lin.push('Assédio moral: '+v('assedioMoralQuem')+', '+v('assedioMoralFrequencia'));
+  if(v('assedioSexual')==='Sim')lin.push('ASSÉDIO SEXUAL RELATADO — ver detalhes na entrevista');
+  if(v('discriminacao')==='Sim')lin.push('Discriminação: '+v('tipoDiscriminacao'));
+  push('Acidente trabalho',v('acidente'));push('Doença ocupacional',v('doencaOcupacional'));
+  if(v('burnout')&&v('burnout').includes('Sim'))lin.push('Burnout/adoecimento: '+v('burnout'));
+  if(v('pejotizacaoForcada')==='Sim')lin.push('PEJOTIZAÇÃO FORÇADA — verificar vínculo CLT');
+  if(v('jornadaAfetouVida')&&v('jornadaAfetouVida')!=='Não')lin.push('Dano existencial: '+v('jornadaAfetouVida'));
+  lin.push('\n— MONITORAMENTO —');push('WhatsApp fora horário',v('monitorWhatsapp'));push('Câmeras',v('monitorCamera'));push('Disponível 24h',v('disponivel24h'));
+  lin.push('\n— DESPESAS —');push('Veículo próprio',v('usaVeiculoProprio'));push('Reembolso km',v('reembolsoKm'));push('Home office',v('homeOffice'));push('Auxílio HO',v('auxilioHomeOffice'));
+  lin.push('\n— PROVAS DISPONÍVEIS —');push('CTPS',v('temCtps'));push('Holerites',v('temHolerites'));push('Contratos',v('temContratos'));push('Mensagens WhatsApp',v('temMensagensWhats'));push('Laudos médicos',v('temLaudosMedicos'));
+  lin.push('\n— TESTEMUNHAS —');[v('testemunhas'),v('testemunha2'),v('testemunha3')].filter(Boolean).forEach((t,i)=>lin.push((i+1)+'. '+t));
+  const{violacoes,ve,score}=calcularScore();
+  lin.push('\n═══ ANÁLISE SIAJFMB v5.0 ═══');
+  lin.push('Score de viabilidade: '+score+'/100');lin.push('Valor estimado da causa: '+fmtMoeda(ve));
+  if(violacoes.length>0){lin.push('Violações detectadas:');violacoes.forEach(vv=>lin.push('  • '+vv.desc+(vv.val>0?' — '+fmtMoeda(vv.val):'')+' ('+vv.norma+')'));}
+  const dias=diasParaPrescrição();if(dias!==null){const presc=new Date(valor('ultimoDia')+'T00:00:00');presc.setFullYear(presc.getFullYear()+2);lin.push('Prescrição bienal: '+(dias>0?dias+' dias restantes':'VENCIDA')+' ('+presc.toLocaleDateString('pt-BR')+')');}
+  const txt=lin.join('\n');const el=document.getElementById('resumoFinal');if(el){el.value=txt;autoEx(el);}return txt;
+}
+
+// ═══════════════════════════════════════
+// PRINT VIEW
+// ═══════════════════════════════════════
+function getObsVal(id){const ta=document.getElementById('obs_'+id);if(!ta)return '';const v=(ta.value||'').trim();return(v&&v!==ta.placeholder)?v:'';}
+function getVal(id){const el=document.getElementById(id);if(!el)return '';if(el.tagName==='SELECT')return el.value==='Selecione'||!el.value?'':el.value;if(el.type==='date')return fmtDate(el.value);const v=(el.value||'').trim();return(v&&v!==el.placeholder)?v:'';}
+function gerarPrintView(){
+  const pv=document.getElementById('printView');if(!pv)return;
+  const LABELS={};campos.forEach(c=>{LABELS[c.id]=c.label.replace(/^[^\w\s\p{L}]*\s*/u,'').replace(/:$/,'').trim();});
+  const SECS=[
+    {titulo:'📌 DADOS DA ENTREVISTA',ids:['dataAtendimento','entrevistador','entrevistado']},
+    {titulo:'👤 DADOS PESSOAIS',ids:['cpfReclamante','rgReclamante','dataNascimento','estadoCivil','telefonePrincipal','emailReclamante','enderecoReclamante','numeroEndReclamante','complementoReclamante','bairroReclamante','cidadeReclamante','ufReclamante','possuiHipossuficiencia']},
+    {titulo:'🏢 EMPRESA & VÍNCULO',ids:['cnpj','nomeEmpresa','enderecoEmpresa','localTrabalho','tipoVinculo','primeiroDia','dataRegistro','aindaTrabalhando','ultimoDia','formaDemissao','justaCausaMotivo','motivoPedido','telegrama','outrasEmpresas','eraTerceirizado','empresaTomadora']},
+    {titulo:'📝 CONTRATO & REGISTRO',ids:['trabalhouAntesCTPS','periodoSemRegistro','contratoExperiencia','prazoContrato','renovouContrato','quantasRenovacoes','mudancaLocalTrabalho','detalhesMudancaLocal']},
+    {titulo:'🧑‍💼 FUNÇÃO & ATIVIDADES',ids:['funcao','atividades','alteracaoFuncao','qualAlteracao','acumuloFuncao','funcoesAcumuladas','ctpsAnotacoes']},
+    {titulo:'💰 SALÁRIO',ids:['ultimoSalario','valorPorFora','quantoPorFora','holerite','formaRecebimento','pagamentoEmDia','frequenciaAtrasos','salarioNaoPago','mesesAberto','diferencaSalarial','nomeColega','funcaoColega','salarioColega','tempoColega','gratificacaoFuncao','valorGratificacao','adicionalNoturnoRecebido','reducaoSalarial','detalheReducao']},
+    {titulo:'🎁 AUXÍLIOS',ids:['valeRefeicaoSim','valeRefeicaoValor','valeTransporteSim','valeTransporteForma','valeTransporteOptouNao','deslocamento','cestaBasicaSim','cestaBasicaTipo','cestaBasicaValor','planoSaude','outrosAuxilios']},
+    {titulo:'⏰ JORNADA & CONTROLE',ids:['tipoEscala','jornDiaInicio','jornDiaFim','jornEntrada','jornSaida','diasSemana','trabalhaSabado','quantosSabados','horarioSabado','trabalhaDomingo','quantosDomingos','horarioDomingo','trabalhavaFeriados','quantosFeriados','horarioCombinado','horarioReal','trabalhoApos22h','horasApos22h','intervalo','tempoIntervalo','horasExtrasCorretas','mediaHe','heUnidade','batiaPonto','pontoVoltar','tipoPonto','bancoHoras','bancoHorasAcordo']},
+    {titulo:'🦺 EPI & SEGURANÇA',ids:['recebiaepi','tiposEPI','epiAdequado','assinavaFichaEPI','treinamentoSeguranca']},
+    {titulo:'📑 VERBAS & RESCISÃO',ids:['avisoPrevio','diasAvisoPrevio','decimoTerceiro','ferias','feriasVencidas','valorFerias','recebeuAcerto','valorAcerto','dataAcerto','assinouRecibo','multaFGTS','fgtsCorreto']},
+    {titulo:'⚠️ INSALUBRIDADE & PERICULOSIDADE',ids:['insalubridade','periculosidade','ambienteUmido','tempExtrema','barulhento','lixoBanheiro','pessoasBanheiro','quimicos','detalheQuimicos','energiaEletrica','inflamaveis','detalheInflamaveis']},
+    {titulo:'🩺 ACIDENTES, PUNIÇÕES & SAÚDE',ids:['punicao','tipoPunicao','assedioMoral','assedioMoralQuem','assedioMoralFrequencia','assedioMoralPublico','assedioDescricao','abaloPsico','testemunhas','testemunha2','testemunha3','ambienteDesc','acidente','detalhesAcidente','quandoAcidente','afastamentoPrevio','cat','doencaOcupacional','qualDoenca']},
+    {titulo:'🛡️ ESTABILIDADE & PROTEÇÕES',ids:['estavelGestante','dataPartoGestante','estavelAcidente','estavelCipa','estavelDirigenteSindical','estavelPreAposentadoria','estavelDetalhes']},
+    {titulo:'📱 MONITORAMENTO',ids:['monitorWhatsapp','monitorWhatsappFreq','monitorCamera','monitorGps','disponivel24h','softwareMonitor']},
+    {titulo:'🚗 DESPESAS & BENS',ids:['usaVeiculoProprio','kmMes','reembolsoKm','usaCelularProprio','reembolsoCelular','homeOffice','auxilioHomeOffice','ferramentasHO']},
+    {titulo:'⚖️ COAÇÃO & DISCRIMINAÇÃO',ids:['pejotizacaoForcada','detalhePejotizacao','pressionadoAssinar','qualDocPresionado','discriminacao','tipoDiscriminacao','descricaoDiscriminacao','assedioSexual','assedioSexualQuem','assedioSexualDescricao','assedioSexualDenunciou','represaliaDepoisDenuncia']},
+    {titulo:'🧠 DANO EXISTENCIAL',ids:['metasAbusivas','descricaoMetas','impedidoFerias','jornadaAfetouVida','descricaoDanoExistencial','tratamentoPsicologico','burnout','laudoBurnout']},
+    {titulo:'📁 PROVAS',ids:['temCtps','temHolerites','temContratos','temMensagensWhats','temFotosVideos','temLaudosMedicos','outrasProvas']},
+    {titulo:'📌 SEGURO & BENEFÍCIOS',ids:['seguroDesemprego','beneficioGov','quaisBeneficios']},
+  ];
+  let html='<div class="pv-header"><h1>⚖️ Entrevista Trabalhista — SIAJFMB v5.0</h1>';
+  const dt=getVal('dataAtendimento'),ent=getVal('entrevistado');
+  html+='<p>Data: '+dt+' | Entrevistado(a): <strong>'+(ent||'—')+'</strong> | Entrevistador(a): '+getVal('entrevistador')+'</p></div>';
+  SECS.forEach(sec=>{let rows='';sec.ids.forEach(id=>{const v=getVal(id);const obs=getObsVal(id);if(!v&&!obs)return;const lbl=LABELS[id]||id;rows+='<div class="pv-row"><div class="pv-label">'+lbl+'</div><div class="pv-val">'+v+'</div></div>';if(obs)rows+='<div class="pv-obs">📝 '+obs+'</div>';});if(!rows)return;html+='<div class="pv-section"><div class="pv-section-title">'+sec.titulo+'</div>'+rows+'</div>';});
+  const sig=document.getElementById('sigPreview');if(sig&&sig.src&&sig.style.display!=='none')html+='<div class="pv-sig"><p style="font-size:8pt;margin-bottom:4px;font-weight:700;">✍️ ASSINATURA DO CLIENTE:</p><img src="'+sig.src+'" /><p style="font-size:7pt;color:#555;">'+document.getElementById('sigTimestamp').textContent+'</p></div>';
+  const res=document.getElementById('resumoFinal').value||gerarResumo();
+  if(res)html+='<div class="pv-resumo"><h2>🧾 Análise SIAJFMB v5.0</h2><pre>'+res+'</pre></div>';
+  pv.innerHTML=html;
+}
+
+// ═══════════════════════════════════════
+// AUTOSAVE
+// ═══════════════════════════════════════
+const SAVE_KEY='siajfmb_v5_session';
+function coletarDados(){const data={};campos.forEach(c=>{const el=document.getElementById(c.id);if(el)data[c.id]=el.value;const obs=document.getElementById('obs_'+c.id);if(obs)data['obs_'+c.id]=obs.value;});data._ts=new Date().toISOString();data._ent=valor('entrevistado');const sig=document.getElementById('sigPreview');if(sig&&sig.src&&sig.style.display!=='none')data._sig=sig.src;return data;}
+function restaurarDados(data){if(!data)return;campos.forEach(c=>{const el=document.getElementById(c.id);if(el&&data[c.id]!==undefined){el.value=data[c.id];if(el.tagName==='TEXTAREA')autoEx(el);}const obs=document.getElementById('obs_'+c.id);if(obs&&data['obs_'+c.id]!==undefined)obs.value=data['obs_'+c.id];});if(data._sig){const sig=document.getElementById('sigPreview');const ts=document.getElementById('sigTimestamp');const sec=document.getElementById('signatureSection');if(sig){sig.src=data._sig;sig.style.display='block';}if(ts&&data._sigTs)ts.textContent=data._sigTs;if(sec)sec.style.display='';}setTimeout(()=>{ajustarTAs(document);atualizarPainel();atualizarSectionTabs();calcularIdade();calcularTempoContrato();},100);}
+let _lastSave=null,_savedData='';
+function autosave(){const d=coletarDados();const s=JSON.stringify(d);if(s===_savedData)return;_savedData=s;try{localStorage.setItem(SAVE_KEY,s);_lastSave=new Date();const el=document.getElementById('autosaveStatus');if(el)el.textContent='💾 '+_lastSave.toLocaleTimeString('pt-BR');}catch(e){}}
+setInterval(autosave,4000);
+function temSessaoSalva(){try{const s=localStorage.getItem(SAVE_KEY);if(!s)return false;const d=JSON.parse(s);return !!(d._ts&&d._ent);}catch(e){return false;}}
+function getSessaoInfo(){try{const s=localStorage.getItem(SAVE_KEY);if(!s)return null;return JSON.parse(s);}catch(e){return null;}}
+
+// ═══════════════════════════════════════
+// PROGRESSIVE DISCLOSURE
+// ═══════════════════════════════════════
+let _progressiveAtivo=false;
+function getValorDisplay(campo){const el=document.getElementById(campo.id);if(!el)return '';if(el.tagName==='SELECT')return el.value&&el.value!=='Selecione'?el.value:'';if(el.type==='date'){if(!el.value)return '';const d=new Date(el.value+'T00:00:00');return isNaN(d)?el.value:d.toLocaleDateString('pt-BR');}const ph=el.placeholder||'';const v=(el.value||'').trim();return(v&&v!==ph)?v:'';}
+function getObsDisplay(id){const ta=document.getElementById('obs_'+id);if(!ta)return '';const v=(ta.value||'').trim();return(v&&v!==ta.placeholder)?v:'';}
+function labelLimpo(txt){return txt.replace(/^[^\p{L}\p{N}]*/u,'').replace(/:$/,'').trim();}
+function marcarRespondido(wrap,campo,idx){const v=getValorDisplay(campo);const obs=getObsDisplay(campo.id);wrap.dataset.state='answered';const old=wrap.querySelector('.q-answered-chip');if(old)old.remove();const chip=document.createElement('div');chip.className='q-answered-chip';const badge=document.createElement('span');badge.className='q-progress-badge';badge.textContent=idx+1;chip.appendChild(badge);const lbl=document.createElement('span');lbl.className='q-answered-label';lbl.textContent=labelLimpo(campo.label);chip.appendChild(lbl);if(v){const val=document.createElement('span');val.className='q-answered-value';val.textContent=v;chip.appendChild(val);}const edit=document.createElement('span');edit.className='q-answered-edit';edit.textContent='✏️ editar';chip.appendChild(edit);wrap.insertBefore(chip,wrap.firstChild);wrap.addEventListener('click',function rea(e){if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA')return;wrap.removeEventListener('click',rea);ativarCampo(wrap,campo,idx,false);},{once:false});}
+function ativarCampo(wrap,campo,idx,scroll=true){const old=wrap.querySelector('.q-answered-chip');if(old)old.remove();wrap.dataset.state='active';if(scroll)setTimeout(()=>wrap.scrollIntoView({behavior:'smooth',block:'center'}),80);const el=document.getElementById(campo.id);if(el)setTimeout(()=>el.focus(),150);}
+function avancarParaProximo(idAtual){const idxAt=todosOsCampos.findIndex(c=>c.id===idAtual);for(let i=idxAt+1;i<todosOsCampos.length;i++){const c=todosOsCampos[i];const w=document.querySelector('.q-wrap[data-id="'+c.id+'"]');if(!w)continue;if(w.dataset.state==='hidden')continue;if(w.dataset.state==='pending'){ativarCampo(w,c,i);return;}}}
+function atualizarProgressBar(){const total=todosOsCampos.filter(c=>{const w=document.querySelector('.q-wrap[data-id="'+c.id+'"]');return w&&w.dataset.state!=='hidden'&&w.dataset.state!=='pending';}).length;const visiveis=todosOsCampos.filter(c=>{const w=document.querySelector('.q-wrap[data-id="'+c.id+'"]');return w&&w.dataset.state!=='hidden';}).length;const pct=visiveis>0?Math.round((total/visiveis)*100):0;const bar=document.getElementById('progressBarInner');const lbl=document.getElementById('progressLabel');if(bar)bar.style.width=pct+'%';if(lbl)lbl.textContent=pct+'% concluído ('+total+' de '+visiveis+' campos)';}
+function iniciarProgressiveDisclosure(){_progressiveAtivo=true;todosOsCampos.forEach((campo,i)=>{const w=document.querySelector('.q-wrap[data-id="'+campo.id+'"]');if(!w)return;if(w.style.display==='none'){w.dataset.state='hidden';return;}w.dataset.state='pending';});for(let i=0;i<todosOsCampos.length;i++){const c=todosOsCampos[i];const w=document.querySelector('.q-wrap[data-id="'+c.id+'"]');if(w&&w.dataset.state==='pending'){ativarCampo(w,c,i,false);break;}}
+todosOsCampos.forEach((campo,idx)=>{const el=document.getElementById(campo.id);if(!el)return;function tentarAvancar(){const w=document.querySelector('.q-wrap[data-id="'+campo.id+'"]');if(!w||w.dataset.state!=='active')return;const v=getValorDisplay(campo);if(!v)return;marcarRespondido(w,campo,idx);avancarParaProximo(campo.id);atualizarProgressBar();}if(el.tagName==='SELECT'){el.addEventListener('change',tentarAvancar);}else{el.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();tentarAvancar();}});el.addEventListener('blur',tentarAvancar);}});atualizarProgressBar();}
+function mostrarTodosOsCampos(){_progressiveAtivo=false;todosOsCampos.forEach(campo=>{const w=document.querySelector('.q-wrap[data-id="'+campo.id+'"]');if(!w)return;const chip=w.querySelector('.q-answered-chip');if(chip)chip.remove();if(w.dataset.state!=='hidden')w.dataset.state='';});document.getElementById('progressBar').style.display='';}
+
+// ═══════════════════════════════════════
+// ASSINATURA
+// ═══════════════════════════════════════
+function hookAssinatura(){
+  const canvas=document.getElementById('signatureCanvas');if(!canvas)return;
+  const ctx=canvas.getContext('2d');let drawing=false;
+  function pos(e){const r=canvas.getBoundingClientRect();const src=e.touches?e.touches[0]:e;return{x:(src.clientX-r.left)*(canvas.width/r.width),y:(src.clientY-r.top)*(canvas.height/r.height)};}
+  function start(e){e.preventDefault();drawing=true;ctx.beginPath();const p=pos(e);ctx.moveTo(p.x,p.y);}
+  function move(e){e.preventDefault();if(!drawing)return;ctx.strokeStyle=_tema==='dark'?'#e8f1f8':'#0f2d4a';ctx.lineWidth=2.5;ctx.lineCap='round';const p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();}
+  function end(){drawing=false;}
+  canvas.addEventListener('mousedown',start);canvas.addEventListener('mousemove',move);canvas.addEventListener('mouseup',end);canvas.addEventListener('touchstart',start,{passive:false});canvas.addEventListener('touchmove',move,{passive:false});canvas.addEventListener('touchend',end);
+  document.getElementById('sigLimpar').addEventListener('click',()=>ctx.clearRect(0,0,canvas.width,canvas.height));
+  document.getElementById('sigFechar').addEventListener('click',()=>document.getElementById('modalAssinatura').classList.remove('open'));
+  document.getElementById('sigCancelar').addEventListener('click',()=>document.getElementById('modalAssinatura').classList.remove('open'));
+  document.getElementById('sigConfirmar').addEventListener('click',()=>{
+    const data=canvas.toDataURL('image/png');const preview=document.getElementById('sigPreview');const ts=document.getElementById('sigTimestamp');const sec=document.getElementById('signatureSection');
+    if(preview){preview.src=data;preview.style.display='block';}const now=new Date();if(ts)ts.textContent='Assinado em '+now.toLocaleDateString('pt-BR')+' às '+now.toLocaleTimeString('pt-BR')+' — Declaro que as informações são verdadeiras.';if(sec)sec.style.display='';document.getElementById('modalAssinatura').classList.remove('open');toast('✅ Assinatura registrada!','ok');
+  });
+  document.getElementById('btnAssinatura').addEventListener('click',()=>{document.getElementById('modalAssinatura').classList.add('open');document.body.style.overflow='hidden';});
+  document.getElementById('modalAssinatura').addEventListener('click',e=>{if(e.target===document.getElementById('modalAssinatura')){document.getElementById('modalAssinatura').classList.remove('open');document.body.style.overflow='';}});
+}
+
+// ═══════════════════════════════════════
+// QR CODE
+// ═══════════════════════════════════════
+function hookQR(){
+  document.getElementById('btnQR').addEventListener('click',()=>{
+    const data=coletarDados();let encoded;
+    try{encoded=btoa(unescape(encodeURIComponent(JSON.stringify(data))));}catch(e){encoded='{}';}
+    const url=location.href.split('?')[0]+'?session='+encoded;
+    const canvas=document.getElementById('qrCanvas');
+    const aviso=document.getElementById('qrAviso');
+    document.getElementById('modalQR').classList.add('open');
+    if(typeof QRCode!=='undefined'){
+      QRCode.toCanvas(canvas,url,{width:220,margin:1,color:{dark:_tema==='dark'?'#e8f1f8':'#0f2d4a',light:_tema==='dark'?'#132336':'#ffffff'}},err=>{if(err&&aviso)aviso.textContent='Erro ao gerar QR: '+err.message;});
+    } else {if(aviso)aviso.textContent='⚠️ Biblioteca QR não carregada. Use conexão com internet.';}
+  });
+  ['qrFechar','qrFecharBtn'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('click',()=>document.getElementById('modalQR').classList.remove('open'));});
+  document.getElementById('modalQR').addEventListener('click',e=>{if(e.target===document.getElementById('modalQR'))document.getElementById('modalQR').classList.remove('open');});
+  // Verificar URL com sessão
+  const params=new URLSearchParams(location.search);const sess=params.get('session');
+  if(sess){try{const data=JSON.parse(decodeURIComponent(escape(atob(sess))));setTimeout(()=>{restaurarDados(data);toast('📱 Sessão restaurada via QR Code!','ok',4000);},500);}catch(e){}}
+}
+
+// ═══════════════════════════════════════
+// MODAL INSALUBRIDADE
+// ═══════════════════════════════════════
+function hookModal(){
+  const sel=document.getElementById('insalubridade');const btnAbrir=document.getElementById('btnAbrirModal');const overlay=document.getElementById('modalInsalubridade');const resumoEl=document.getElementById('insalubResumo');if(!sel||!overlay)return;
+  sel.addEventListener('change',()=>{if(btnAbrir)btnAbrir.style.display=sel.value==='Sim'?'flex':'none';});
+  if(btnAbrir)btnAbrir.addEventListener('click',()=>{overlay.classList.add('open');document.body.style.overflow='hidden';});
+  function fechar(){overlay.classList.remove('open');document.body.style.overflow='';}
+  document.getElementById('modalFechar').addEventListener('click',fechar);document.getElementById('modalCancelar').addEventListener('click',fechar);overlay.addEventListener('click',e=>{if(e.target===overlay)fechar();});
+  document.getElementById('modalConfirmar').addEventListener('click',()=>{
+    const checks=overlay.querySelectorAll('input[type=checkbox]:checked');const labels=[];const lm={tempCalor:'Calor excessivo',tempFrio:'Frio/câmara frigorífica',umidade:'Umidade constante',quimicoContato:'Químicos (contato)',quimicoInalacao:'Químicos (inalação)',bioLixo:'Biológico — lixo/esgoto',bioFluidos:'Biológico — fluidos corporais',ruido:'Ruído intenso',limpezaBanheiro:'Limpeza banheiros (grau máx.)',recolheLixo:'Recolhimento lixo orgânico',eletrico:'Risco elétrico',inflamavel:'Inflamáveis/explosivos',moto:'Motocicleta',vigilante:'Vigilante',epiNaoFornecido:'EPI não fornecido',epiIneficaz:'EPI ineficaz'};
+    checks.forEach(c=>labels.push(lm[c.getAttribute('data-insalub')]||c.getAttribute('data-insalub')));
+    if(labels.length>0){resumoEl.innerHTML='<strong>✅ Fatores:</strong> '+labels.join(' · ');resumoEl.classList.add('ativo');}else{resumoEl.textContent='';resumoEl.classList.remove('ativo');}fechar();
+  });
+}
+
+// ═══════════════════════════════════════
+// MODO CLIENTE
+// ═══════════════════════════════════════
+let _modoCliente=false;
+document.getElementById('btnModoCliente').addEventListener('click',()=>{
+  _modoCliente=!_modoCliente;const btn=document.getElementById('btnModoCliente');const liveCol=document.getElementById('liveCol');
+  if(_modoCliente){if(liveCol)liveCol.style.display='none';btn.classList.add('cliente-on');btn.innerHTML='🔒 <span class="btn-label">Interno</span>';toast('👁️ Modo Cliente ativado — análise oculta','wa');}
+  else{if(liveCol)liveCol.style.display='';btn.classList.remove('cliente-on');btn.innerHTML='👁️ <span class="btn-label">Cliente</span>';toast('🔒 Modo Interno restaurado','ok');}
+});
+
+// ═══════════════════════════════════════
+// BOTÕES PRINCIPAIS
+// ═══════════════════════════════════════
+document.getElementById('btnGerarResumo').addEventListener('click',()=>{gerarResumo();toast('✅ Resumo gerado!','ok');});
+document.getElementById('btnCopiarResumo').addEventListener('click',async()=>{const txt=document.getElementById('resumoFinal').value||gerarResumo();try{await navigator.clipboard.writeText(txt);toast('📋 Resumo copiado!','ok');}catch{toast('Selecione e copie manualmente.','wa');}});
+document.getElementById('btnWhatsApp').addEventListener('click',()=>{
+  const ent=valor('entrevistado'),emp=valor('nomeEmpresa');const{score,ve}=calcularScore();
+  let msg='⚖️ *ENTREVISTA TRABALHISTA — SIAJFMB v5.0*\n';
+  if(ent)msg+='👤 Cliente: *'+ent+'*\n';if(emp)msg+='🏢 Empresa: '+emp+'\n';
+  msg+='📊 Score: *'+score+'/100*\n💰 Valor estimado: *'+fmtMoeda(ve)+'*\n\n';
+  msg+='_Entrevista realizada em '+fmtDate(valor('dataAtendimento'))+'_';
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+});
+document.getElementById('btnImprimir').addEventListener('click',()=>{ajustarTAs(document);gerarResumo();gerarPrintView();const nome=(valor('entrevistado')||'').trim();const orig=document.title;document.title=nome?'ENTREVISTA - '+nome.toUpperCase():'ENTREVISTA TRABALHISTA';window.print();setTimeout(()=>{document.title=orig;},1500);});
+document.getElementById('btnLimpar').addEventListener('click',()=>{if(!confirm('Confirma? Todos os dados serão apagados.'))return;document.querySelectorAll('#formVertical input,#formVertical select,#formVertical textarea').forEach(el=>{if(el.tagName==='SELECT')el.selectedIndex=0;else el.value='';if(el.tagName==='TEXTAREA'){el.dataset.mh='';autoEx(el);}});const r=document.getElementById('resumoFinal');if(r){r.value='';autoEx(r);}const sig=document.getElementById('sigPreview');const ts=document.getElementById('sigTimestamp');const sec=document.getElementById('signatureSection');if(sig){sig.src='';sig.style.display='none';}if(ts)ts.textContent='';if(sec)sec.style.display='none';document.querySelectorAll('.api-msg').forEach(el=>{el.className='api-msg';el.textContent='';});try{localStorage.removeItem(SAVE_KEY);}catch(e){}configurarAutoHoje();atualizarPainel();toast('🗑️ Formulário limpo!','wa');});
+document.getElementById('btnModoEntrevista').addEventListener('click',()=>{const btn=document.getElementById('btnModoEntrevista');if(!_progressiveAtivo){iniciarProgressiveDisclosure();btn.classList.add('entrevista-on');btn.innerHTML='📋 <span class="btn-label">Normal</span>';toast('🎯 Modo Entrevista ativado!','ok');}else{mostrarTodosOsCampos();btn.classList.remove('entrevista-on');btn.innerHTML='🎯 <span class="btn-label">Entrevista</span>';toast('📋 Modo Normal restaurado','ok');}});
+
+// Auto-atualizar painel e resumo
+document.getElementById('formVertical').addEventListener('change',()=>{setTimeout(()=>{atualizarPainel();atualizarSectionTabs();if(document.getElementById('resumoFinal').value.trim())gerarResumo();},50);});
+
+// ═══════════════════════════════════════
+// SPLASH SCREEN
+// ═══════════════════════════════════════
+function iniciarApp(recuperar=false){
+  const splash=document.getElementById('splashScreen');const app=document.getElementById('mainApp');
+  splash.style.opacity='0';splash.style.transition='opacity .4s';setTimeout(()=>{splash.style.display='none';app.classList.add('visible');},400);
+  construirFormulario();
+  setTimeout(()=>{
+    ajustarTAs(document);hookCalcs();hookModal();hookAssinatura();hookQR();
+    if(recuperar){const d=getSessaoInfo();restaurarDados(d);toast('🔄 Sessão anterior restaurada!','ok',4000);}
+    atualizarPainel();
+  },100);
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  const sessaoExiste=temSessaoSalva();const btnRec=document.getElementById('btnRecuperarSessao');const info=document.getElementById('splashSessionInfo');
+  if(sessaoExiste){const d=getSessaoInfo();if(btnRec)btnRec.style.display='';if(d&&d._ent&&info)info.textContent='Sessão: '+d._ent+' ('+new Date(d._ts).toLocaleString('pt-BR')+')';}
+  document.getElementById('btnNovaEntrevista').addEventListener('click',()=>iniciarApp(false));
+  if(btnRec)btnRec.addEventListener('click',()=>iniciarApp(true));
+  // Check URL params
+  const params=new URLSearchParams(location.search);if(params.get('session'))iniciarApp(true);
+});
+</script>
+</body>
+</html>
